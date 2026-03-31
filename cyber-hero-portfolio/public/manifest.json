@@ -1,0 +1,22 @@
+{
+  "short_name": "VSR SOC",
+  "name": "Voddiraju Sriman Rutvik | SOC Analyst Portfolio",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#050810",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#050810",
+  "description": "SOC Analyst & Cybersecurity Specialist Portfolio"
+}

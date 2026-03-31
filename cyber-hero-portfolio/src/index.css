@@ -1,0 +1,569 @@
+/* ============================================================
+   SOC OPERATOR PORTFOLIO — index.css
+   Theme: "Void Operator" — Dark SOC Command Center
+   ============================================================ */
+
+/* ── Fonts ─────────────────────────────────────────────── */
+/* Moved to index.html as <link> for non-render-blocking load */
+
+/* ── Design Tokens ──────────────────────────────────────── */
+:root {
+  /* Colors */
+  --c-void:     #050810;
+  --c-surface:  #0a0f1e;
+  --c-panel:    #0d1525;
+  --c-cyan:     #00f3ff;
+  --c-cyan-dim: #33f7ff;   /* higher contrast for small text (AA pass) */
+  --c-violet:   #7c3aed;
+  --c-red:      #ff0033;
+  --c-amber:    #f59e0b;
+  --c-green:    #00ff88;
+  --c-text:          #e2f5ff;
+  --c-muted:         rgba(226, 245, 255, 0.95); /* Increased for readability */
+  --c-border:        rgba(0, 243, 255, 0.12);
+  --c-panel:         rgba(8, 13, 26, 0.6);
+
+  /* Glow helpers */
+  --glow-cyan:   0 0 20px rgba(0, 243, 255, 0.35), 0 0 60px rgba(0, 243, 255, 0.1);
+  --glow-red:    0 0 20px rgba(255, 0, 51, 0.4),   0 0 60px rgba(255, 0, 51, 0.1);
+  --glow-green:  0 0 16px rgba(0, 255, 136, 0.4);
+  --glow-violet: 0 0 20px rgba(124, 58, 237, 0.4);
+  
+  /* Hero Tokens (Marvel X DC X DBZ) */
+  --c-stark-red:   #ff0033;
+  --c-wayne-blue:  #0a192f;
+  --c-z-gold:      #ffd700;
+  --glow-hero:     0 0 25px rgba(255, 215, 0, 0.5), 0 0 60px rgba(255, 215, 0, 0.2);
+  --glow-stark:    0 0 25px rgba(255, 0, 51, 0.6),  0 0 60px rgba(255, 0, 51, 0.2);
+  --glow-wayne:    0 0 25px rgba(10, 25, 47, 0.8),  0 0 60px rgba(10, 25, 47, 0.4);
+
+  /* Typography */
+  --font-display: 'Orbitron',      'Courier New', monospace;
+  --font-body:    'Inter',         system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono','Fira Code', 'Courier New', monospace;
+
+  /* Spacing */
+  --section-gap: clamp(4rem, 10vh, 10rem);
+}
+
+/* ── ELITE CUSTOM SCROLLBAR (CXO Polish) ──────────────── */
+::-webkit-scrollbar {
+  width: 10px;
+  background: var(--c-void);
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 1px solid var(--c-border);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--c-cyan) 0%, transparent 100%);
+  border: 2px solid var(--c-void);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-cyan);
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ── Accessibility: Reduced Motion ──────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Base ────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--c-void);
+  color: var(--c-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Layered background: grid + radial glow (50/50 Marvel X DC) */
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% 10%, rgba(255, 0, 51, 0.05) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 90%, rgba(10, 25, 47, 0.8) 0%, transparent 70%),
+    linear-gradient(rgba(0, 243, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.025) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+  background-attachment: fixed;
+}
+
+/* Touch devices: restore cursor */
+@media (hover: none) and (pointer: coarse) {
+  body, *, a, button, input, select { cursor: auto !important; }
+}
+
+/* Force global cursor removal for 3D experience */
+* {
+  cursor: none !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--c-void); }
+::-webkit-scrollbar-thumb {
+  background: var(--c-cyan);
+  border-radius: 10px;
+  opacity: 0.6;
+}
+/* scrollbar-width / scrollbar-color omitted from the global * selector:
+   - Chrome/Safari covered by ::-webkit-scrollbar rules above
+   - These W3C properties are Chrome 121+ / Firefox only; Edge Tools flags them
+     for Safari/older Chrome — correct progressive enhancement but unfixable warning.
+   - Added only where explicitly needed via a scoped rule if required. */
+
+/* ── Skip Link (Accessibility) ──────────────────────────── */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: var(--c-cyan);
+  color: var(--c-void);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: top var(--dur-fast);
+}
+.skip-link:focus { top: 1rem; }
+
+/* ── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--c-text);
+}
+
+.font-mono { font-family: var(--font-mono); }
+.font-display { font-family: var(--font-display); }
+
+/* ── Glassmorphism ──────────────────────────────────────── */
+/* PERF: Single blur layer on the container element only */
+.glass {
+  background: var(--c-glass);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid var(--c-border);
+}
+
+/* Corner brackets via pseudo-elements (no extra DOM nodes) */
+.bracket {
+  position: relative;
+}
+.bracket::before,
+.bracket::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  transition: width var(--dur-normal) var(--ease-out),
+              height var(--dur-normal) var(--ease-out),
+              opacity var(--dur-normal);
+}
+.bracket::before {
+  top: -1px; left: -1px;
+  border-top: 2px solid var(--c-cyan);
+  border-left: 2px solid var(--c-cyan);
+}
+.bracket::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid var(--c-cyan);
+  border-right: 2px solid var(--c-cyan);
+}
+.bracket:hover::before,
+.bracket:hover::after {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Cyber Label ────────────────────────────────────────── */
+.cyber-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;   /* 10px */
+  letter-spacing: 0.35em;
+  font-weight: 700;
+  color: var(--c-cyan);
+  text-transform: uppercase;
+}
+
+/* ── Scanline ────────────────────────────────────────────── */
+/* One shared scanline per panel — not stacked */
+.scanline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c-cyan), transparent);
+  opacity: 0.2;
+  animation: scan 10s linear infinite;
+  pointer-events: none;
+  will-change: transform;
+}
+/* ─────────────────────────────────────────────────────────────
+   ELITE_UIUX_TOKENS (Top 0.01% Grade)
+   ───────────────────────────────────────────────────────────── */
+
+/* High-intensity glow variations */
+:root {
+  --c-cyan-glow: rgba(0, 243, 255, 0.4);
+  --c-red-glow: rgba(255, 0, 51, 0.4);
+  --c-amber-glow: rgba(245, 158, 11, 0.4);
+  --c-green-glow: rgba(0, 255, 136, 0.4);
+  --c-violet-glow: rgba(124, 58, 237, 0.4);
+}
+
+/* Horizontal Cyber Pulse (Scan-wipe) */
+.cyber-pulse::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 243, 255, 0.05),
+    rgba(0, 243, 255, 0.15),
+    rgba(0, 243, 255, 0.05),
+    transparent
+  );
+  animation: cyberPulse 4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes cyberPulse {
+  0% { left: -100%; }
+  25% { left: 100%; }
+  100% { left: 100%; }
+}
+
+/* Glitch label animation */
+.glitch-text:hover {
+  animation: glitchText 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+}
+
+@keyframes glitchText {
+  0% { transform: translate(0); text-shadow: none; }
+  20% { transform: translate(-2px, 2px); text-shadow: 2px 0 #00f3ff, -2px 0 #ff0033; }
+  40% { transform: translate(-2px, -2px); text-shadow: 2px 2px #00f3ff, -2px -2px #ff0033; }
+  60% { transform: translate(2px, 2px); text-shadow: -2px 2px #00f3ff, 2px -2px #ff0033; }
+  80% { transform: translate(2px, -2px); text-shadow: -2px -2px #00f3ff, 2px 2px #ff0033; }
+  100% { transform: translate(0); }
+}
+
+/* Terminal stream generator effect */
+.terminal-stream {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: rgba(0, 243, 255, 0.03);
+  overflow: hidden;
+  white-space: pre-wrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+}
+
+.card-project:hover .terminal-stream {
+  opacity: 1;
+}
+
+/* Tilt utility class behavior (controlled by JS for performance) */
+.tilt-on-hover {
+  transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+  will-change: transform;
+}
+@keyframes scan {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(var(--scan-height, 400px)); }
+}
+
+/* ── Pulse ───────────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.8; }
+  100% { transform: scale(1.8);  opacity: 0;   }
+}
+.pulse-ring {
+  animation: pulse-ring 2s ease-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ── Glow Text ───────────────────────────────────────────── */
+.glow-cyan   { text-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
+.glow-red    { text-shadow: 0 0 20px rgba(255, 0,  51,  0.6); }
+.glow-green  { text-shadow: 0 0 16px rgba(0, 255, 136, 0.6); }
+.glow-violet { text-shadow: 0 0 20px rgba(124, 58, 237, 0.6); }
+
+/* ── Status dots ─────────────────────────────────────────── */
+.status-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-dot.online   { background: var(--c-green);  box-shadow: var(--glow-green);  }
+.status-dot.warning  { background: var(--c-amber); }
+.status-dot.critical { background: var(--c-red);    box-shadow: var(--glow-red);    }
+.status-dot.pulse {
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── Scroll Reveal ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Stagger children */
+.stagger-children > *:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > *:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > *:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > *:nth-child(4) { transition-delay: 240ms; }
+.stagger-children > *:nth-child(5) { transition-delay: 320ms; }
+.stagger-children > *:nth-child(6) { transition-delay: 400ms; }
+.stagger-children > *:nth-child(n+7) { transition-delay: 480ms; }
+
+/* ── Focus styles (Accessibility) ──────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--c-cyan);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ── Section layout ─────────────────────────────────────── */
+.section-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-cyber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-cyan);
+  border: 1px solid var(--c-cyan);
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    color var(--dur-fast),
+    box-shadow var(--dur-fast),
+    transform var(--dur-fast);
+  will-change: transform;
+}
+.btn-cyber::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--c-cyan);
+  transform: translateX(-101%);
+  transition: transform var(--dur-normal) var(--ease-out);
+  z-index: 0;
+}
+.btn-cyber:hover::before { transform: translateX(0); }
+.btn-cyber:hover {
+  color: var(--c-void);
+  box-shadow: var(--glow-cyan);
+}
+.btn-cyber:active { transform: scale(0.97); }
+.btn-cyber > * { position: relative; z-index: 1; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--c-muted);
+  border: 1px solid rgba(255,255,255,0.1);
+  background: transparent;
+  cursor: pointer;
+  transition: color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-fast);
+}
+.btn-ghost:hover {
+  color: var(--c-text);
+  border-color: rgba(255,255,255,0.3);
+}
+.btn-ghost:active { transform: scale(0.97); }
+
+/* ── Cards ───────────────────────────────────────────────── */
+.card-project {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  padding: 2rem;
+  transition:
+    transform var(--dur-normal) var(--ease-out),
+    border-color var(--dur-normal),
+    box-shadow var(--dur-normal);
+  will-change: transform;
+  cursor: default;
+}
+.card-project:hover {
+  transform: translateY(-6px);
+  border-color: rgba(0, 243, 255, 0.4);
+  box-shadow: var(--glow-cyan);
+}
+/* Scanline sweep on hover */
+.card-project::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--c-cyan), transparent);
+  transition: top 0.5s ease;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.card-project:hover::after { top: 100%; }
+
+/* ── Print ───────────────────────────────────────────────── */
+@media print {
+  .no-print, canvas, .hud-fixed { display: none !important; }
+  body { background: white; color: black; cursor: auto; }
+  a { color: black; text-decoration: underline; }
+}
+
+/* ── Responsive helpers ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  h1 { font-size: clamp(2rem, 8vw, 3.5rem) !important; }
+  h2 { font-size: clamp(1.5rem, 6vw, 2.5rem) !important; }
+}
+@media (min-width: 769px) {
+  .hide-desktop { display: none !important; }
+}
+
+/* ── Custom Animations ───────────────────────────────────── */
+@keyframes drawerSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes menuItemFade {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes radarFadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-drawer { animation: drawerSlide 0.25s ease-out both; }
+.animate-menu-item { animation: menuItemFade 0.3s ease both; }
+.animate-radar { animation: radarFadeIn 0.8s ease both; }
+.animate-cursor { animation: cursorBlink 0.7s step-end infinite; }
+/* ── Hero Highlighting ───────────────────────────────────── */
+.hero-glow-me {
+  text-shadow: var(--glow-hero);
+  animation: heroPulse 3s ease-in-out infinite;
+}
+
+.hero-glow-skills {
+  box-shadow: var(--glow-stark);
+  border-color: var(--c-stark-red) !important;
+}
+
+.hero-glow-projects {
+  box-shadow: var(--glow-wayne);
+  border-color: var(--c-wayne-blue) !important;
+}
+
+@keyframes heroPulse {
+  0%, 100% { filter: brightness(1);   transform: scale(1);   }
+  50%       { filter: brightness(1.4); transform: scale(1.02); }
+}
+
+@keyframes spectralGlow {
+  0%   { border-color: var(--c-cyan);  box-shadow: var(--glow-cyan); }
+  33%  { border-color: var(--c-stark-red); box-shadow: var(--glow-stark); }
+  66%  { border-color: var(--c-z-gold);    box-shadow: var(--glow-hero); }
+  100% { border-color: var(--c-cyan);  box-shadow: var(--glow-cyan); }
+}
+
+.animate-hero-glow {
+  animation: spectralGlow 6s linear infinite;
+}

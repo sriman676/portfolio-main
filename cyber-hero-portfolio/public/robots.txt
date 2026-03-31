@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sriman676.github.io/Portfolio/sitemap.xml
