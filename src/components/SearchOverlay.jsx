@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useStore } from '../systems/store';
 import { config } from '../portfolioConfig';
 import { audio } from '../systems/audio';
+import NiharikaEasterEgg from './NiharikaEasterEgg';
 
 // ── Build searchable index from config ────────────────────
 const buildIndex = () => {
@@ -61,6 +62,7 @@ export default function SearchOverlay() {
   const [results, setResults]   = useState([]);
   const [cursor, setCursor]     = useState(0);
   const [mounted, setMounted]   = useState(false);
+  const [showEgg, setShowEgg]   = useState(false);
   const inputRef                = useRef(null);
   const listRef                 = useRef(null);
 
@@ -92,6 +94,17 @@ export default function SearchOverlay() {
       return () => clearTimeout(t);
     }
   }, [isSearchOpen]);
+
+  // Easter egg detection
+  useEffect(() => {
+    if (searchQuery.trim().toLowerCase() === 'niharika') {
+      audio.playWarp?.(0.5);
+      setTimeout(() => {
+        setShowEgg(true);
+        closeSearch();
+      }, 300);
+    }
+  }, [searchQuery, closeSearch]);
 
   // Search
   useEffect(() => {
@@ -144,6 +157,11 @@ export default function SearchOverlay() {
         closeSearch();
         return;
       }
+      if (q === 'NIHARIKA') {
+        closeSearch();
+        setShowEgg(true);
+        return;
+      }
 
       if (results[cursor]?.url) {
         audio.playClick();
@@ -171,6 +189,7 @@ export default function SearchOverlay() {
     el?.scrollIntoView({ block: 'nearest' });
   }, [cursor]);
 
+  if (showEgg) return <NiharikaEasterEgg onClose={() => setShowEgg(false)} />;
   if (!mounted) return null;
 
   return (
