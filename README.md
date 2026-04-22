@@ -44,40 +44,40 @@ Most portfolios show static cards. This one communicates operational mindset.
 
 ```text
 cyber-hero-portfolio/
-	public/
-		icons.svg
-		favicon.svg
-		resume.pdf
-	src/
-		app/
-			layout.jsx
-			page.jsx
-			immersive/
-				page.jsx
-			recruiter/
-				page.jsx
-			api/
-				github/repos/route.js
-		3d/
-			CyberScene.jsx
-			Avatar.jsx
-			CursorTrail.jsx
-			PostEffects.jsx
-		components/
-			BootSequence.jsx
-			NavBar.jsx
-			PortfolioSections.jsx
-			RecruiterView.jsx
-			SearchOverlay.jsx
-			TerminalHUD.jsx
-			HUD.jsx
-		systems/
-			store.js
-			audio.js
-			MusicPlayer.jsx
-			performance.js
-		portfolioConfig.js
-		index.css
+  public/
+    icons.svg
+    favicon.svg
+    resume.pdf
+  src/
+    app/
+      layout.jsx
+      page.jsx
+      immersive/
+        page.jsx
+      recruiter/
+        page.jsx
+      api/
+        github/repos/route.js
+    3d/
+      CyberScene.jsx
+      Avatar.jsx
+      CursorTrail.jsx
+      PostEffects.jsx
+    components/
+      BootSequence.jsx
+      NavBar.jsx
+      PortfolioSections.jsx
+      RecruiterView.jsx
+      SearchOverlay.jsx
+      TerminalHUD.jsx
+      HUD.jsx
+    systems/
+      store.js
+      audio.js
+      MusicPlayer.jsx
+      performance.js
+    portfolioConfig.js
+    index.css
 ```
 
 ## Quick Start
