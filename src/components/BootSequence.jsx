@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '../systems/store';
 import { audio } from '../systems/audio';
 
-// Boot sequence logic with real environment detection
-const BOOT_LINES = [
+// Boot sequence logic — generated lazily to avoid SSR navigator access
+const getBootLines = () => [
   `> SENTINEL_OS v2.0 — INITIALIZING...`,
-  `> KERNEL: ${navigator.userAgent.split(' ')[0]}`,
+  `> KERNEL: ${typeof navigator !== 'undefined' ? navigator.userAgent.split(' ')[0] : 'UNKNOWN'}`,
   `> HARDWARE_ACCEL: DETECTED`,
   `> ESTABLISHING_ENCRYPTED_TUNNEL...OK`,
   `> SIEM_ENGINE_v4.2_ONLINE.........OK`,
@@ -23,6 +23,7 @@ export default function BootSequence() {
   const timerRef                = useRef(null);
 
   useEffect(() => {
+    const BOOT_LINES = getBootLines();
     const addLine = () => {
       if (iRef.current >= BOOT_LINES.length) {
         // All lines shown — begin fade out
@@ -123,7 +124,7 @@ export default function BootSequence() {
           <div style={{
             height: '100%',
             background: '#00f3ff',
-            width: `${(lines.length / BOOT_LINES.length) * 100}%`,
+            width: `${(lines.length / 8) * 100}%`,
             transition: 'width 0.2s ease',
             boxShadow: '0 0 8px rgba(0,243,255,0.8)',
           }} />
