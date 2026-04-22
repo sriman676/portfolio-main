@@ -4,7 +4,10 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useStore } from '../systems/store';
 import { config } from '../portfolioConfig';
 import { audio } from '../systems/audio';
-import NiharikaEasterEgg from './NiharikaEasterEgg';
+import KernelFault from './KernelFault';
+
+// Runtime-decoded key — not a readable string in source
+const _xk = () => atob('bmloYXJpa2E=');
 
 // ── Build searchable index from config ────────────────────
 const buildIndex = () => {
@@ -95,9 +98,9 @@ export default function SearchOverlay() {
     }
   }, [isSearchOpen]);
 
-  // Easter egg detection
+  // Hidden system recovery check
   useEffect(() => {
-    if (searchQuery.trim().toLowerCase() === 'niharika') {
+    if (searchQuery.trim().toLowerCase() === _xk()) {
       audio.playWarp?.(0.5);
       setTimeout(() => {
         setShowEgg(true);
@@ -157,7 +160,7 @@ export default function SearchOverlay() {
         closeSearch();
         return;
       }
-      if (q === 'NIHARIKA') {
+      if (q === _xk().toUpperCase()) {
         closeSearch();
         setShowEgg(true);
         return;
@@ -189,7 +192,7 @@ export default function SearchOverlay() {
     el?.scrollIntoView({ block: 'nearest' });
   }, [cursor]);
 
-  if (showEgg) return <NiharikaEasterEgg onClose={() => setShowEgg(false)} />;
+  if (showEgg) return <KernelFault onClose={() => setShowEgg(false)} />;
   if (!mounted) return null;
 
   return (
