@@ -1,6 +1,8 @@
 # Cyber Hero Portfolio
 
-A cinematic, interactive cybersecurity portfolio built with React, Vite, and React Three Fiber.
+**🔴 Live Deployment:** [https://portfolio-main-sooty-sigma.vercel.app](https://portfolio-main-sooty-sigma.vercel.app)
+
+A cinematic, interactive cybersecurity portfolio built with Next.js App Router, React 19, and React Three Fiber.
 
 This project presents my work as a SOC-focused cybersecurity practitioner through a command-center inspired interface, real-time style HUD components, searchable project intelligence, and a 3D scene-backed experience.
 
@@ -32,8 +34,8 @@ Most portfolios show static cards. This one communicates operational mindset.
 
 ## Tech Stack
 
+- Next.js 16.2.4 (App Router)
 - React 19
-- Vite 8
 - Three.js + @react-three/fiber + @react-three/drei + @react-three/postprocessing
 - Zustand (state management)
 - ESLint 9
@@ -43,31 +45,32 @@ Most portfolios show static cards. This one communicates operational mindset.
 ```text
 cyber-hero-portfolio/
 	public/
-		icons/
+		icons.svg
+		favicon.svg
+		resume.pdf
 	src/
+		app/
+			layout.jsx
+			page.jsx
+			immersive/
+				page.jsx
+			recruiter/
+				page.jsx
+			api/
+				github/repos/route.js
 		3d/
 			CyberScene.jsx
 			Avatar.jsx
-			CursorTrail.jsx
-			PostEffects.jsx
 		components/
 			BootSequence.jsx
 			NavBar.jsx
-			PortfolioSections.jsx
-			SearchOverlay.jsx
+			RecruiterView.jsx
 			TerminalHUD.jsx
-			VoiceNarrator.jsx
-			SystemHUD.jsx
-			HUD.jsx
 		systems/
 			store.js
 			audio.js
-			AudioSystem.jsx
-			DeviceController.jsx
 		portfolioConfig.js
-		App.jsx
 		index.css
-		main.jsx
 ```
 
 ## Quick Start
@@ -95,10 +98,10 @@ npm run dev
 npm run build
 ```
 
-### Preview Production Build
+### Start Production Server
 
 ```bash
-npm run preview
+npm start
 ```
 
 ### Lint
