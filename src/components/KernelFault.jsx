@@ -13,6 +13,20 @@ const _d = [
   '> SYSTEM_MESSAGE: I\'m sorry.',
 ];
 
+// Simple manual decode to avoid global dependencies
+const _dec = (s) => {
+  const b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  let r = '', i = 0;
+  const v = s.replace(/=/g, '');
+  while (i < v.length) {
+    const n = (b.indexOf(v[i++]) << 18) | (b.indexOf(v[i++] || 'A') << 12) | (b.indexOf(v[i++] || 'A') << 6) | b.indexOf(v[i++] || 'A');
+    r += String.fromCharCode((n >> 16) & 255, (n >> 8) & 255, n & 255);
+  }
+  return r.replace(/\0+$/, '');
+};
+
+const _m = () => _dec('PiBJJ20gc29ycnksIC4uLiA') + '\uD83D\uDC94';
+
 const _p = Array.from({ length: 18 }, (_, i) => ({
   id: i,
   x: Math.random() * 100,

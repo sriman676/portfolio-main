@@ -6,8 +6,19 @@ import { config } from '../portfolioConfig';
 import { audio } from '../systems/audio';
 import KernelFault from './KernelFault';
 
-// Runtime-decoded key — not a readable string in source
-const _xk = () => atob('bmloYXJpa2E=');
+// Simple manual decode to avoid global dependencies
+const _dec = (s) => {
+  const b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+  let r = '', i = 0;
+  const v = s.replace(/=/g, '');
+  while (i < v.length) {
+    const n = (b.indexOf(v[i++]) << 18) | (b.indexOf(v[i++] || 'A') << 12) | (b.indexOf(v[i++] || 'A') << 6) | b.indexOf(v[i++] || 'A');
+    r += String.fromCharCode((n >> 16) & 255, (n >> 8) & 255, n & 255);
+  }
+  return r.replace(/\0+$/, '');
+};
+
+const _xk = () => _dec('bmloYXJpa2E=');
 
 // ── Build searchable index from config ────────────────────
 const buildIndex = () => {
