@@ -61,14 +61,21 @@ cyber-hero-portfolio/
 		3d/
 			CyberScene.jsx
 			Avatar.jsx
+			CursorTrail.jsx
+			PostEffects.jsx
 		components/
 			BootSequence.jsx
 			NavBar.jsx
+			PortfolioSections.jsx
 			RecruiterView.jsx
+			SearchOverlay.jsx
 			TerminalHUD.jsx
+			HUD.jsx
 		systems/
 			store.js
 			audio.js
+			MusicPlayer.jsx
+			performance.js
 		portfolioConfig.js
 		index.css
 ```
