@@ -1,12 +1,13 @@
 'use client';
 export const dynamic = 'force-dynamic';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import BootSequence from '../components/BootSequence';
+import { useStore } from '../systems/store';
 
 export default function RootLoaderPage() {
-  const [bootComplete, setBootComplete] = useState(false);
+  const bootComplete = useStore((s) => s.bootComplete);
   const router = useRouter();
 
   // If boot completes, redirect to immersive view.
@@ -18,7 +19,7 @@ export default function RootLoaderPage() {
 
   return (
     <main style={{ width: '100vw', height: '100vh', background: '#000' }}>
-      <BootSequence onComplete={() => setBootComplete(true)} />
+      <BootSequence />
     </main>
   );
 }
