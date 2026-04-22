@@ -13,7 +13,7 @@ export const config = {
   degree: "B.Tech – Computer Science & Engineering (Cybersecurity)",
   location: "Mangalagiri, India · Open to Remote",
   availableForWork: true,
-  resumeUrl: "/Portfolio/resume.pdf",
+  resumeUrl: "/resume.pdf",
 
 
   hiringEssentials: {

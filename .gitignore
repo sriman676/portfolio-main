@@ -32,3 +32,6 @@ dist-ssr
 
 # Next.js
 .next
+
+.vercel
+.env*.local
