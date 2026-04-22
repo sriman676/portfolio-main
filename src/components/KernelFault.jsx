@@ -50,9 +50,6 @@ const _h = `
             \u2588
 `.trim();
 
-// Decoded at runtime — not a readable string in source
-const _m = () => atob('PiBJJ20gc29ycnksIC4uLiDwn5Sc');
-
 export default function KernelFault({ onClose }) {
   const [lines, setLines]         = useState([]);
   const [showHeart, setShowHeart] = useState(false);
