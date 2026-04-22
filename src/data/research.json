@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Google Cybersecurity Professional",
+    "issuer": "Google",
+    "platform": "Coursera",
+    "color": "#4285f4",
+    "verifyUrl": "https://www.coursera.org/account/accomplishments/professional-cert/SST68REK9D29"
+  },
+  {
+    "name": "IBM Cybersecurity Analyst Professional",
+    "issuer": "IBM",
+    "platform": "Coursera",
+    "color": "#1f70c1",
+    "verifyUrl": "https://www.coursera.org/account/accomplishments/specialization/SST68REK9D29"
+  },
+  {
+    "name": "PCAP Analysis Certificate",
+    "issuer": "LetsDefend",
+    "platform": "LetsDefend",
+    "color": "#00f3ff",
+    "verifyUrl": "https://app.letsdefend.io/user/sriman676"
+  },
+  {
+    "name": "SOC Member Certificate",
+    "issuer": "LetsDefend",
+    "platform": "LetsDefend",
+    "color": "#00ff88",
+    "verifyUrl": "https://app.letsdefend.io/user/sriman676"
+  }
+]

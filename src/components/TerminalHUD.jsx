@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { useStore } from '../systems/store';
 import { config } from '../portfolioConfig';
@@ -10,7 +12,7 @@ export default function TerminalHUD() {
   const clearLogs     = useStore((s) => s.clearTerminalLogs);
   const toggleTerminal = useStore((s) => s.toggleTerminal);
 
-  const [input, setInput] = React.useState('');
+  const [input, setInput] = useState('');
   const inputRef          = useRef(null);
   const logEndRef         = useRef(null);
   const isMountedRef      = useRef(true);
@@ -34,12 +36,6 @@ export default function TerminalHUD() {
     logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
 
-  // Close on Escape
-  useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape' && isOpen) toggleTerminal(); };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [isOpen, toggleTerminal]);
 
   const lastCommandsRef = useRef([]);
 
@@ -210,7 +206,7 @@ export default function TerminalHUD() {
             value={input}
             onChange={(e) => {
               // BUG FIX: Sanitize input — max 100 chars, no HTML
-              const safe = e.target.value.replace(/[<>]/g, '').slice(0, 100);
+              const safe = e.target.value.replace(/[<>'&]/g, '').slice(0, 100);
               setInput(safe);
             }}
             onKeyDown={handleCommand}

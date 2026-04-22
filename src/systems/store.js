@@ -21,6 +21,10 @@ export const useStore = create((set, get) => ({
   perfTier: 'high',
   isStarted: true,
   bootComplete: false,
+  recruiterMode: typeof window !== 'undefined' ? localStorage.getItem('sentinel_recruiter_mode') === 'true' : false,
+  isAutoScanning: false,
+  isStoryMode: false,
+  currentTheme: 'wayne', // 'stark' or 'wayne'
 
   // 3D Scene
   nodes: INITIAL_NODES,
@@ -31,10 +35,11 @@ export const useStore = create((set, get) => ({
   isSearchOpen: false,
   searchQuery: '',
 
-  // Narration & Captions
-  narrationPromptShown: false,
-  narrationEnabled: false,
+  // Section tracking
   currentSection: 'hero',
+  zOffset: 0,           // 3D Depth parameter
+  scrollVelocity: 0,    // For Warp Speed effect
+  isSingularity: false, // Black hole / Singularity state
 
   // Telemetry
   threatsBlocked: 4021,
@@ -44,17 +49,42 @@ export const useStore = create((set, get) => ({
 
   // Terminal
   terminalLogs: [
-    { id: newLogId(), text: 'SENTINEL_v2.0 INITIALIZED', ts: new Date().toLocaleTimeString() },
+    { id: newLogId(), text: 'SENTINEL_v3.0_EXECUTIVE INITIALIZED', ts: new Date().toLocaleTimeString() },
     { id: newLogId(), text: 'ALL_SYSTEMS_NOMINAL. TYPE "HELP" FOR COMMANDS.', ts: new Date().toLocaleTimeString() },
   ],
 
   // Actions ─────────────────────────────────────────────────
+  toggleRecruiterMode: () => {
+    const next = !get().recruiterMode;
+    localStorage.setItem('sentinel_recruiter_mode', next);
+    set({ recruiterMode: next });
+    
+    // Disable terminal and search when entering recruiter mode
+    if (next) set({ isTerminalOpen: false, isSearchOpen: false });
+  },
+
+  setRecruiterMode: (val) => {
+    if (typeof window !== 'undefined') localStorage.setItem('sentinel_recruiter_mode', val);
+    set({ recruiterMode: val });
+    if (val) set({ isTerminalOpen: false, isSearchOpen: false });
+  },
+
+  toggleStoryMode: () => set((state) => ({ isStoryMode: !state.isStoryMode })),
+
   setStarted: () => set({ isStarted: true }),
   setBootComplete: () => set({ bootComplete: true }),
   setPerfTier: (tier) => set({ perfTier: tier }),
   setAnimationState: (s) => set({ animationState: s }),
 
-  toggleMute: () => set((state) => ({ isMuted: !state.isMuted })),
+  toggleMute: () => {
+    // Import audio lazily to avoid SSR issues
+    import('../systems/audio').then(({ audio }) => {
+      const next = !get().isMuted;
+      audio.init();          // Unlock AudioContext on first interaction
+      audio.setMute(next);   // Sync audio engine
+      set({ isMuted: next });
+    });
+  },
 
   toggleTerminal: () =>
     set((state) => ({ isTerminalOpen: !state.isTerminalOpen })),
@@ -65,11 +95,17 @@ export const useStore = create((set, get) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
   closeSearch: () => set({ isSearchOpen: false, searchQuery: '' }),
 
-  // Narration
-  setNarrationPromptShown: () => set({ narrationPromptShown: true }),
-  enableNarration: () => set({ narrationEnabled: true, isMuted: false }),
-  disableNarration: () => set({ narrationEnabled: false }),
   setCurrentSection: (section) => set({ currentSection: section }),
+  setZOffset: (val) => set((state) => ({ 
+    zOffset: typeof val === 'function' ? val(state.zOffset) : val 
+  })),
+  setScrollVelocity: (val) => set((state) => ({ 
+    scrollVelocity: typeof val === 'function' ? val(state.scrollVelocity) : val 
+  })),
+  enterSingularity: () => set({ isSingularity: true, sysLogMessage: 'FATAL_ERROR: EVENT_HORIZON_BREACHED' }),
+  resetSingularity: () => set({ isSingularity: false, zOffset: 0, sysLogMessage: 'SYSTEM_RESTORED: SINGULARITY_NORMALIZED' }),
+  setAutoScanning: (val) => set({ isAutoScanning: val }),
+  setTheme: (theme) => set({ currentTheme: theme }),
 
   // Terminal logs
   addTerminalLog: (text) =>

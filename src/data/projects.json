@@ -1,0 +1,67 @@
+[
+  {
+    "id": "siem-orchestration",
+    "title": "SIEM_THREAT_LAB",
+    "subtitle": "Enterprise-grade SIEM Deployment & Log Analysis",
+    "problem": "Traditional security monitoring in lab environments lacked centralized visibility for anomalous event correlation.",
+    "action": "Deployed and configured a Splunk-based SIEM environment with sysmon integration for real-time Windows security log ingestion.",
+    "result": "Reduced mean-time-to-detection (MTTD) for simulated brute-force attacks by 45% through custom alert correlation rules.",
+    "constraints": "Required low-latency log forwarding over high-traffic virtual subnets.",
+    "failures": "Initial log forwarding configurations caused data overflow; resolved by implementing universal forwarders with local buffering.",
+    "keywords": [
+      "Splunk",
+      "SIEM",
+      "Sysmon",
+      "Blue Team"
+    ],
+    "stack": [
+      "Splunk Enterprise",
+      "Sysmon",
+      "Windows Server"
+    ],
+    "github": "https://github.com/sriman676",
+    "featured": true,
+    "mitre": [
+      "T1110: Brute Force",
+      "T1078: Valid Accounts"
+    ]
+  },
+  {
+    "id": "p1",
+    "title": "SENTINEL_IDS",
+    "subtitle": "Real-time Network Intrusion Detection Engine",
+    "problem": "Standard perimeter defenses failed to capture lateral movement within the internal lab subnet.",
+    "action": "Engineered a Scapy-driven IDS with signature-matching for unusual TCP handshake patterns and Nmap scanning signatures.",
+    "result": "Achieved 92% detection accuracy for common discovery and enumeration techniques.",
+    "constraints": "High network throughput required efficient zero-copy packet processing.",
+    "failures": "Primary packet queue encountered buffer overflows; mitigated by implementing multi-threaded deque handling.",
+    "github": "https://github.com/sriman676",
+    "featured": true,
+    "keywords": [
+      "Network Security",
+      "IDS",
+      "Scapy",
+      "TCP/IP"
+    ],
+    "mitre": [
+      "T1046: Network Service Discovery",
+      "T1018: Remote System Discovery"
+    ]
+  },
+  {
+    "id": "p2",
+    "title": "PHISH_TRIAGE_AUTO",
+    "subtitle": "Automated Phishing Analysis Pipeline",
+    "problem": "Manual analysis of suspicious emails was time-consuming and inconsistent during high-intensity SOC simulations.",
+    "action": "Developed a Python framework to parse .eml files, extract headers, and verify URL reputation via VirusTotal/Urlscan APIs.",
+    "result": "Automated the initial assessment for 100% of incoming suspicious email samples in the test dataset.",
+    "github": "https://github.com/sriman676",
+    "featured": true,
+    "keywords": [
+      "Python Automation",
+      "Phishing Analysis",
+      "OSINT",
+      "Email Security"
+    ]
+  }
+]

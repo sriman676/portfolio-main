@@ -1,0 +1,16 @@
+[
+  {
+    "id": "alert-1",
+    "title": "Brute Force Detection",
+    "type": "Alert Log",
+    "content": "{\"timestamp\": \"2024-03-21T10:14:02Z\", \"event_id\": 4625, \"source_ip\": \"192.168.1.104\", \"status\": \"FAIL\", \"count\": 12}",
+    "description": "Automated alert triggered after 10+ failed login attempts within 5 seconds."
+  },
+  {
+    "id": "logic-1",
+    "title": "Detection Logic (Sigma)",
+    "type": "Code Snippet",
+    "content": "logsource:\n  product: windows\n  service: security\ndetection:\n  selection:\n    EventID: 4625\n  condition: selection | count() > 5",
+    "description": "Custom Sigma rule for identifying potential brute-force vectors."
+  }
+]

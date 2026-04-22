@@ -10,7 +10,7 @@ export default function CursorTrail() {
   // Pre-allocate position vector to avoid GC pressure
   const targetPos = useMemo(() => new THREE.Vector3(), []);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current) return;
     
     // Project mouse position into 3D scene (on a plane at Z=5)

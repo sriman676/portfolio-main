@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { config } from '../portfolioConfig';
 import { useStore } from '../systems/store';
@@ -43,10 +45,16 @@ const Counter = memo(({ target, suffix = '', duration = 1800 }) => {
 const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$';
 const CipherText = memo(({ text, delay = 0 }) => {
   const [display, setDisplay] = useState(() =>
-    text.split('').map(() => CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
+    text.replace(/[a-zA-Z0-9]/g, '-')
   );
   const [ref, visible] = useReveal(0.3);
   const done = useRef(false);
+
+  useEffect(() => {
+    if (!done.current) {
+      setDisplay(text.split('').map((char) => char === ' ' ? ' ' : CHARS[Math.floor(Math.random() * CHARS.length)]).join(''));
+    }
+  }, [text]);
 
   useEffect(() => {
     if (!visible || done.current) return;
@@ -92,26 +100,49 @@ function Section({ id, children, style = {} }) {
 }
 
 // ── Section title ─────────────────────────────────────────
-function SectionTitle({ label, title, accent }) {
+function SectionTitle({ label, title, accent, number }) {
+  const [ref, visible] = useReveal(0.15);
   return (
-    <div style={{ marginBottom: '3rem' }}>
-      <div className="cyber-label" style={{ marginBottom: '0.75rem', color: accent || 'var(--c-cyan)' }}>
+    <div ref={ref} style={{ marginBottom: '3rem' }}>
+      <div style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: '0.6rem',
+        letterSpacing: '0.4em',
+        color: accent || 'var(--c-cyan)',
+        marginBottom: '0.75rem',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateX(0)' : 'translateX(-20px)',
+        transition: 'opacity 0.5s ease, transform 0.5s ease',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+      }}>
+        {number && <span style={{ opacity: 0.4 }}>{number}</span>}
         {label}
       </div>
       <h2 style={{
         fontFamily: 'var(--font-display)',
         fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
         fontWeight: 900,
-        letterSpacing: '0.15em',
+        letterSpacing: '0.12em',
         color: 'var(--c-text)',
         textTransform: 'uppercase',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(16px)',
+        transition: 'opacity 0.6s 0.1s ease, transform 0.6s 0.1s ease',
+        textShadow: '0 0 40px rgba(0,243,255,0.08)',
       }}>
         {title}
       </h2>
-      <div style={{ width: 64, height: 2, background: accent || 'var(--c-cyan)', marginTop: '1rem', boxShadow: `0 0 10px ${accent || 'var(--c-cyan)'}` }} />
+      {/* Animated underline draw */}
+      <div
+        className={visible ? 'section-underline visible' : 'section-underline'}
+        style={{ background: accent || 'var(--c-cyan)', boxShadow: `0 0 10px ${accent || 'var(--c-cyan)'}` }}
+      />
     </div>
   );
 }
+
 
 // ── HERO ──────────────────────────────────────────────────
 const HeroSection = memo(() => {
@@ -132,16 +163,17 @@ const HeroSection = memo(() => {
         scrollMarginTop: 56,
       }}
     >
-      <div style={{
-        background: 'rgba(5,8,16,0.55)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        border: '1px solid rgba(0,243,255,0.12)',
+      <div className="floating" style={{
+        background: 'rgba(2,3,10,0.65)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
+        border: '1px solid rgba(0,243,255,0.14)',
         borderLeft: '6px solid var(--c-cyan)',
         padding: 'clamp(1.5rem, 4vw, 3rem)',
         maxWidth: 680,
         position: 'relative',
         overflow: 'hidden',
+        boxShadow: '0 0 60px rgba(0,243,255,0.06), 0 0 120px rgba(255,0,51,0.04)',
       }}>
         <div className="scanline" style={{ '--scan-height': '300px' }} />
 
@@ -167,7 +199,7 @@ const HeroSection = memo(() => {
           NODE_OVERVIEW: [VODDIRAJU_SRIMAN_RUTVIK]
         </div>
 
-        <h1 className="hero-glow-me" style={{
+        <h1 className="hero-supernova" style={{
           fontFamily: 'var(--font-display)',
           fontSize: 'clamp(2.5rem, 7vw, 5rem)',
           fontWeight: 900,
@@ -183,21 +215,6 @@ const HeroSection = memo(() => {
           </span>
         </h1>
 
-        {/* Power Level Indicator */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          marginBottom: '2rem',
-          padding: '0.3rem 0.75rem',
-          border: '1px solid var(--c-z-gold)',
-          background: 'rgba(255, 215, 0, 0.08)',
-          boxShadow: 'var(--glow-hero)',
-        }}>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 900, color: 'var(--c-z-gold)', letterSpacing: '0.1em' }}>
-            POWER_LEVEL: OVER 9000
-          </span>
-        </div>
 
         <p style={{
           fontFamily: 'var(--font-mono)',
@@ -344,21 +361,24 @@ const AboutSection = memo(() => {
 
 // ── SKILLS (Unified: Radar + Terminal Scan + Arsenal Cards) ──
 const CAT_COLOR = {
-  defense:   'var(--c-cyan)',
-  offense:   'var(--c-red)',
-  forensics: 'var(--c-amber)',
-  recon:     'var(--c-green)',
-  dev:       'var(--c-violet)',
+  defense:      'var(--c-cyan)',
+  intelligence: 'var(--c-violet)',
+  operations:   'var(--c-stark-red)',
+  foundations:  'var(--c-green)',
 };
 const CAT_HEX = {
-  defense:   '#00f3ff',
-  offense:   '#ff0033',
-  forensics: '#f59e0b',
-  recon:     '#00ff88',
-  dev:       '#7c3aed',
+  defense:      '#00f3ff',
+  intelligence: '#a855f7',
+  operations:   '#ff0033',
+  foundations:  '#00ff88',
 };
-const CATEGORIES = ['defense', 'offense', 'forensics', 'recon', 'dev'];
-const CAT_LABELS = { defense: 'DEFENSE', offense: 'OFFENSE', forensics: 'FORENSICS', reconnaissance: 'RECON', dev: 'DEV' };
+const CATEGORIES = ['defense', 'intelligence', 'operations', 'foundations'];
+const CAT_LABELS = { 
+  defense: 'CYBER_DEFENSE', 
+  intelligence: 'AI_INTEL', 
+  operations: 'TACTICAL_OPS', 
+  foundations: 'CORE_INFRA' 
+};
 
 // Compute average level per category
 function getCategoryAverages() {
@@ -470,198 +490,65 @@ const RadarChart = memo(({ animate }) => {
   );
 });
 
-// ── Terminal Scan Animation ───────────────────────────────
-const TerminalScan = memo(({ visible }) => {
-  const [lines, setLines] = useState([]);
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (!visible || started.current) return;
-    started.current = true;
-    const scanLines = [
-      '> SCANNING_OPERATOR_ARSENAL...',
-      '> DEFENSE_MODULES: [LOADED]',
-      '> OFFENSE_VECTORS: [LOADED]',
-      '> FORENSICS_TOOLS: [LOADED]',
-      '> RECON_SUITE: [LOADED]',
-      '> DEV_STACK: [LOADED]',
-      '> ARSENAL_SCAN_COMPLETE. DISPLAYING_INVENTORY:',
-    ];
-    let i = 0, mounted = true;
-    const add = () => {
-      if (!mounted || i >= scanLines.length) return;
-      setLines((prev) => [...prev, scanLines[i]]);
-      i++;
-      setTimeout(add, 80);
-    };
-    add();
-    return () => { mounted = false; };
-  }, [visible]);
-
-  if (!lines.length) return null;
-
-  return (
-    <div style={{
-      marginBottom: '2rem',
-      padding: '1rem 1.25rem',
-      background: 'rgba(5,8,16,0.6)',
-      border: '1px solid rgba(0,243,255,0.08)',
-      borderLeft: '3px solid var(--c-cyan)',
-      overflow: 'hidden',
-    }}>
-      {lines.map((line, i) => (
-        <div key={i} style={{
-          fontFamily: 'var(--font-mono)',
-          fontSize: '0.65rem',
-          letterSpacing: '0.05em',
-          color: line?.includes('[LOADED]') ? 'var(--c-green)'
-               : line?.includes('COMPLETE') ? 'var(--c-cyan)'
-               : 'var(--c-muted)',
-          lineHeight: 1.8,
-          animation: 'logFadeIn 0.15s ease',
-        }}>
-          {line}
-        </div>
-      ))}
-      <style>{`
-        @keyframes logFadeIn {
-          from { opacity: 0; transform: translateX(-4px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-      `}</style>
-    </div>
-  );
-});
 
 // ── SKILLS ────────────────────────────────────────────────
 const SkillsSection = memo(() => {
-  const [filter, setFilter] = useState('all');
-  const [radarRef, radarVisible] = useReveal(0.2);
-  const [scanRef, scanVisible] = useReveal(0.15);
-  const filtered = filter === 'all'
-    ? config.skills
-    : config.skills.filter((s) => s.category === filter);
+  const [activeTab, setActiveTab] = useState('defense');
+
+  const filteredSkills = config.skills.filter(s => activeTab === 'all' || s.category === activeTab);
 
   return (
     <Section id="skills">
       <div className="section-wrapper" style={{ padding: 'var(--section-gap) clamp(1.5rem,5vw,4rem)' }}>
-        <SectionTitle label="// HERO_SPECIALIZATIONS" title="SUPERPOWER INVENTORY" accent="var(--c-stark-red)" />
+        <SectionTitle label="// OPERATOR_ARSENAL" title="SKILLS" accent="var(--c-cyan)" />
 
-        {/* Top: Radar + Stats */}
-        <div ref={radarRef} style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: '2rem',
-          marginBottom: '2.5rem',
-          alignItems: 'center',
-        }}>
-          {/* Radar chart */}
-          <div style={{
-            background: 'var(--c-panel)',
-            border: '1px solid var(--c-border)',
-            padding: '1.5rem',
-            position: 'relative',
-          }}>
-            <div className="cyber-label" style={{ marginBottom: '1rem', textAlign: 'center', fontSize: '0.5rem' }}>
-              THREAT_COVERAGE_MAP
-            </div>
-            <RadarChart animate={radarVisible} />
-          </div>
 
-          {/* Category breakdown */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div className="cyber-label" style={{ marginBottom: '0.5rem', fontSize: '0.5rem' }}>
-              CATEGORY_BREAKDOWN
-            </div>
-            {CATEGORIES.map((cat) => {
-              const skills = config.skills.filter((s) => s.category === cat);
-              const avg = skills.length ? Math.round(skills.reduce((s, sk) => s + sk.level, 0) / skills.length) : 0;
-              const color = CAT_COLOR[cat];
-              const label = (cat === 'recon' ? 'RECON' : cat).toUpperCase();
-              return (
-                <div key={cat} 
-                  className="hero-glow-skills"
-                  style={{
-                  padding: '0.75rem 1rem',
-                  background: 'var(--c-panel)',
-                  border: `1px solid ${CAT_HEX[cat]}33`,
-                  borderLeft: `3px solid ${CAT_HEX[cat]}`,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s',
-                }}
-                  onClick={() => setFilter(filter === cat ? 'all' : cat)}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = `${CAT_HEX[cat]}08`;
-                    e.currentTarget.style.transform = 'translateX(4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'var(--c-panel)';
-                    e.currentTarget.style.transform = 'translateX(0)';
-                  }}
-                >
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.6rem', letterSpacing: '0.2em', color, fontWeight: 700 }}>
-                      {label}
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: 'var(--c-muted)', marginTop: '0.2rem' }}>
-                      {skills.length} TOOL{skills.length !== 1 ? 'S' : ''}
-                    </div>
-                  </div>
-                  <div style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: '1.2rem',
-                    fontWeight: 900,
-                    color,
-                  }}>
-                    {avg}%
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Terminal Scan */}
-        <div ref={scanRef}>
-          <TerminalScan visible={scanVisible} />
-        </div>
-
-        {/* Category filters */}
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-          {config.skillCategories.map(({ id, label }) => (
-            <button
-              key={id}
-              onClick={() => setFilter(id)}
-              aria-pressed={filter === id}
-              style={{
-                padding: '0.35rem 0.85rem',
-                border: '1px solid',
-                borderColor: filter === id ? 'var(--c-violet)' : 'rgba(255,255,255,0.08)',
-                background: filter === id ? 'rgba(124,58,237,0.15)' : 'transparent',
-                color: filter === id ? 'var(--c-violet)' : 'var(--c-muted)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.6rem',
-                letterSpacing: '0.15em',
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-              }}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Arsenal cards grid */}
+        {/* Arsenal tab row */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: '1rem',
+          display: 'flex',
+          gap: '0.4rem',
+          marginBottom: '2.5rem',
+          flexWrap: 'wrap',
+          borderBottom: '1px solid rgba(255,255,255,0.04)',
+          paddingBottom: '1rem',
+          position: 'relative',
+          zIndex: 200,
+          pointerEvents: 'auto',
+          isolation: 'isolate',
         }}>
-          {filtered.map((skill, i) => (
-            <SkillCard key={skill.name} skill={skill} index={i} />
+          {['all', ...CATEGORIES].map(cat => {
+            const catColor = CAT_HEX[cat] || '#00f3ff';
+            const isActive = activeTab === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setActiveTab(cat)}
+                className={`arsenal-tab ${isActive ? 'active' : ''}`}
+                style={{
+                  color: isActive ? catColor : undefined,
+                  position: 'relative',
+                  zIndex: 200,
+                  pointerEvents: 'auto',
+                }}
+              >
+                <span>{cat === 'all' ? 'FULL_ARSENAL' : CAT_LABELS[cat]}</span>
+              </button>
+            );
+          })}
+        </div>
+
+
+        {/* Skills cards grid */}
+        <div className="scrollable-area" style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '1rem',
+          minHeight: '200px', // Responsive height
+          maxHeight: '45vh',
+          paddingRight: '0.5rem',
+        }}>
+          {filteredSkills.map((skill, i) => (
+            <SkillCard key={skill.name} skill={skill} index={i} categoryChanged={activeTab} />
           ))}
         </div>
       </div>
@@ -677,73 +564,76 @@ const SkillCard = memo(({ skill, index }) => {
   return (
     <div
       ref={ref}
-      className={`bracket reveal cyber-pulse ${visible ? 'visible' : ''}`}
+      className={`skill-card-holo reveal ${visible ? 'visible' : ''}`}
       style={{
-        transitionDelay: `${index * 50}ms`,
-        padding: '1.25rem',
-        background: 'var(--c-panel)',
-        border: `1px solid ${hex}22`,
+        transitionDelay: `${(index % 8) * 50}ms`,
+        padding: '1.1rem 1.25rem',
+        background: `linear-gradient(135deg, rgba(2,3,10,0.9) 0%, ${hex}08 100%)`,
+        border: `1px solid ${hex}20`,
         position: 'relative',
-        overflow: 'hidden',
-        transition: 'transform var(--dur-normal) var(--ease-out), box-shadow var(--dur-normal)',
         cursor: 'default',
+        animation: visible ? `popIn 0.4s ${index * 40}ms both` : 'none',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)';
-        e.currentTarget.style.boxShadow = `0 0 30px ${hex}40`;
-        e.currentTarget.style.borderColor = `${hex}60`;
+        e.currentTarget.style.boxShadow = `0 8px 40px ${hex}30, 0 0 0 1px ${hex}40`;
+        e.currentTarget.style.borderColor = `${hex}50`;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0) scale(1)';
         e.currentTarget.style.boxShadow = 'none';
-        e.currentTarget.style.borderColor = `${hex}22`;
+        e.currentTarget.style.borderColor = `${hex}20`;
       }}
     >
-      {/* Category tag */}
+      {/* Category dot + label */}
       <div style={{
         fontFamily: 'var(--font-mono)',
         fontSize: '0.5rem',
         letterSpacing: '0.25em',
         color,
-        marginBottom: '0.5rem',
+        marginBottom: '0.6rem',
         display: 'flex',
         alignItems: 'center',
         gap: '0.4rem',
       }}>
-        <div style={{ width: 6, height: 6, background: hex, boxShadow: `0 0 6px ${hex}`, flexShrink: 0 }} />
-        {skill.category.toUpperCase()}
+        <div style={{
+          width: 6, height: 6,
+          background: hex,
+          boxShadow: `0 0 8px ${hex}, 0 0 16px ${hex}66`,
+          flexShrink: 0,
+          borderRadius: '50%',
+          animation: 'neonBreathe 2.5s ease-in-out infinite',
+        }} />
+        {skill.category.toUpperCase().replace('_', ' ')}
       </div>
 
       {/* Skill name */}
       <div style={{
         fontFamily: 'var(--font-display)',
-        fontSize: '0.85rem',
+        fontSize: '0.82rem',
         fontWeight: 700,
         color: 'var(--c-text)',
         marginBottom: '1rem',
-        letterSpacing: '0.05em',
+        letterSpacing: '0.04em',
+        lineHeight: 1.3,
       }}>
         {skill.name}
       </div>
 
-      {/* Progress bar (thicker + glow) */}
-      <div style={{ height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+      {/* Progress bar */}
+      <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
         <div style={{
           height: '100%',
           width: visible ? `${skill.level}%` : '0%',
-          background: `linear-gradient(90deg, ${hex}, ${hex}cc)`,
-          boxShadow: `0 0 12px ${hex}, 0 0 2px ${hex}`,
-          transition: `width 1.2s cubic-bezier(0.16,1,0.3,1) ${index * 60}ms`,
+          background: `linear-gradient(90deg, ${hex}aa, ${hex})`,
+          boxShadow: `0 0 10px ${hex}88`,
+          transition: `width 1.4s cubic-bezier(0.16,1,0.3,1) ${(index % 8) * 60 + 200}ms`,
           borderRadius: 2,
         }} />
       </div>
-
-      {/* Level */}
       <div style={{
-        marginTop: '0.5rem',
+        marginTop: '0.45rem',
         fontFamily: 'var(--font-mono)',
-        fontSize: '0.55rem',
-        color: 'var(--c-muted)',
+        fontSize: '0.5rem',
+        color: 'rgba(255,255,255,0.25)',
         display: 'flex',
         justifyContent: 'space-between',
       }}>
@@ -754,24 +644,219 @@ const SkillCard = memo(({ skill, index }) => {
   );
 });
 
+
+// ── GITHUB LIVE REPO CARD ─────────────────────────────────
+// Auto-generate a description for repos with null description
+const autoDesc = (name, lang) => {
+  const n = name.toLowerCase().replace(/[-_]/g, ' ');
+  if (n.includes('soc'))        return 'Security Operations Center tooling and SIEM automation.';
+  if (n.includes('portfolio'))  return 'Quantum-themed immersive 3D cybersecurity portfolio.';
+  if (n.includes('caption') || n.includes('image')) return 'AI-powered image captioning and visual recognition.';
+  if (n.includes('humanizer'))  return 'Converts AI-generated text to natural human writing.';
+  if (n.includes('trust'))      return 'Zero-trust network security architecture.';
+  if (n.includes('farmer') || n.includes('farm')) return 'Farm-to-home e-commerce platform.';
+  if (n.includes('simulation') || n.includes('sim')) return 'Network attack simulation and defence testing.';
+  if (n.includes('project'))    return 'Security research and development project.';
+  if (lang === 'Python')        return 'Python-based automation and security scripting tool.';
+  if (lang === 'JavaScript')    return 'Full-stack web application with security-first design.';
+  if (lang === 'C++' || lang === 'C') return 'Systems-level security and network analysis tool.';
+  return 'Open-source security tool — see repo for details.';
+};
+
+const LANG_COLOR = {
+  Python: '#3572A5', JavaScript: '#f1e05a', TypeScript: '#3178c6',
+  Shell: '#89e051', HTML: '#e34c26', CSS: '#563d7c',
+};
+
+const GithubCard = memo(({ repo, index }) => {
+  const [ref, visible] = useReveal(0.05);
+  const langColor = LANG_COLOR[repo.language] || 'var(--c-cyan)';
+  const cardRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    const card = cardRef.current;
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    card.style.transform = `perspective(600px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateY(-6px)`;
+  };
+  const handleMouseLeave = () => {
+    if (cardRef.current) {
+      cardRef.current.style.transform = '';
+      cardRef.current.style.boxShadow = 'none';
+    }
+  };
+  const handleMouseEnter = () => {
+    if (cardRef.current) {
+      cardRef.current.style.boxShadow = '0 0 30px rgba(0,255,187,0.18), 0 16px 40px rgba(0,0,0,0.5)';
+    }
+  };
+
+  return (
+    <a
+      ref={(el) => { ref.current = el; cardRef.current = el; }}
+      href={repo.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Open ${repo.name} repository on GitHub`}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        textDecoration: 'none',
+        opacity: visible ? 1 : 0,
+        transform: visible ? '' : 'translateY(24px)',
+        transition: `opacity .5s ease ${index * 70}ms, transform .5s ease ${index * 70}ms, box-shadow .25s ease`,
+        padding: '1.4rem',
+        background: 'rgba(5,10,20,0.88)',
+        border: '1px solid rgba(0,255,187,0.12)',
+        borderLeft: '3px solid var(--c-green)',
+        minHeight: '170px',
+        position: 'relative',
+        overflow: 'hidden',
+        cursor: 'pointer',
+        willChange: 'transform',
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleMouseEnter}
+    >
+      {/* Shimmer sweep */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 1,
+        background: 'linear-gradient(120deg, transparent 30%, rgba(0,255,187,0.05) 50%, transparent 70%)',
+        backgroundSize: '200% 100%', backgroundPosition: '100% 0',
+        transition: 'background-position 0.5s ease',
+      }} />
+
+      {/* "Open in GitHub" corner badge */}
+      <div style={{
+        position: 'absolute', top: '0.6rem', right: '0.6rem',
+        fontFamily: 'var(--font-mono)', fontSize: '0.45rem',
+        color: 'rgba(0,255,187,0.45)', letterSpacing: '0.15em',
+        pointerEvents: 'none', zIndex: 3,
+      }}>↗ GITHUB</div>
+
+      <div style={{ position: 'relative', zIndex: 2 }}>
+        <div style={{
+          fontFamily: 'var(--font-display)', fontSize: '0.88rem',
+          fontWeight: 700, color: 'var(--c-text)',
+          marginBottom: '0.5rem', letterSpacing: '0.04em',
+        }}>
+          {repo.name.toUpperCase().replace(/-/g, '_')}
+        </div>
+        <div style={{
+          fontFamily: 'var(--font-mono)', fontSize: '0.62rem',
+          color: 'var(--c-muted)', lineHeight: 1.65, marginBottom: '1rem',
+        }}>
+          {repo.description || autoDesc(repo.name, repo.language)}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.55rem', position: 'relative', zIndex: 2 }}>
+        {repo.language && (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: langColor, display: 'inline-block', boxShadow: `0 0 6px ${langColor}` }} />
+            <span style={{ color: langColor }}>{repo.language}</span>
+          </span>
+        )}
+        <span style={{ color: 'rgba(255,255,255,0.3)' }}>★ {repo.stars ?? 0}</span>
+      </div>
+    </a>
+  );
+});
+
+
 // ── PROJECTS ──────────────────────────────────────────────
 const THREAT_COLOR = { CRITICAL: '#ff0033', HIGH: '#f59e0b', LOW: '#00ff88' };
 const STATUS_COLOR = { ACTIVE: '#00ff88', COMPLETE: '#4a6080' };
 
-const ProjectsSection = memo(() => {
+const ProjectsSection = memo(({ repos = [] }) => {
+  const scrollRef = useRef(null);
+  const githubRepos = repos;
+  const loading = !repos || repos.length === 0;
+
+  // Auto-scroll logic for GitHub Repos
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || githubRepos.length === 0) return;
+    
+    let animationFrameId;
+    let isHovered = false;
+
+    const handleMouseEnter = () => isHovered = true;
+    const handleMouseLeave = () => isHovered = false;
+    
+    el.addEventListener('mouseenter', handleMouseEnter);
+    el.addEventListener('mouseleave', handleMouseLeave);
+    el.addEventListener('touchstart', handleMouseEnter, { passive: true });
+    el.addEventListener('touchend', handleMouseLeave);
+
+    const scrollStep = () => {
+      if (el && !isHovered) {
+        el.scrollLeft += 2; // Speed: 2px per frame
+        // If we hit the end, loop back quietly
+        if (el.scrollLeft >= (el.scrollWidth - el.clientWidth)) {
+          el.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scrollStep);
+    };
+
+    animationFrameId = requestAnimationFrame(scrollStep);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (el) {
+         el.removeEventListener('mouseenter', handleMouseEnter);
+         el.removeEventListener('mouseleave', handleMouseLeave);
+         el.removeEventListener('touchstart', handleMouseEnter);
+         el.removeEventListener('touchend', handleMouseLeave);
+      }
+    };
+  }, [githubRepos]);
+
+  // This section now uses prop-driven data from the server
+
+
   return (
     <Section id="projects">
       <div className="section-wrapper" style={{ padding: 'var(--section-gap) clamp(1.5rem,5vw,4rem)' }}>
-        <SectionTitle label="// GLOBAL_MISSION_FILES" title="GLOBAL MISSIONS" accent="var(--c-wayne-blue)" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-          {config.projects.map((p, i) => (
-            <ProjectCard key={p.id} project={p} index={i} />
-          ))}
-        </div>
+        <SectionTitle label="// LIVE_TELEMETRY" title="PROJECTS" accent="var(--c-green)" />
+
+        {loading && (
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--c-muted)', letterSpacing: '0.15em' }}>
+            › FETCHING_GITHUB_REPOS...
+          </div>
+        )}
+
+        {/* Dynamic GitHub Repos — horizontal auto-scroll */}
+        {!loading && (
+          <div
+            ref={scrollRef}
+            className="hide-scrollbar"
+            style={{
+              display: 'flex',
+              flexWrap: 'nowrap',
+              overflowX: 'auto',
+              gap: '1.5rem',
+              paddingBottom: '1.5rem',
+              scrollBehavior: 'auto',
+            }}
+          >
+            {githubRepos.map((repo, i) => (
+              <div key={repo.id} style={{ minWidth: '280px', flex: '0 0 auto' }}>
+                <GithubCard repo={repo} index={i} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </Section>
   );
 });
+
 
 const ProjectCard = memo(({ project: p, index }) => {
   const [ref, visible] = useReveal(0.1);
@@ -787,11 +872,11 @@ const ProjectCard = memo(({ project: p, index }) => {
     const y = e.clientY - rect.top;
     const rx = (y / rect.height - 0.5) * 8;
     const ry = (x / rect.width - 0.5) * -8;
-    el.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px)`;
+    el.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px) scale(1.04)`;
   };
 
   const handleMouseLeave = (e) => {
-    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
   };
 
   return (
@@ -1026,7 +1111,7 @@ const TimelineSection = memo(() => {
     <Section id="timeline">
       <div className="section-wrapper" style={{ padding: 'var(--section-gap) clamp(1.5rem,5vw,4rem)' }}>
         <SectionTitle label="// OPERATOR_HISTORY" title="TIMELINE" accent="var(--c-cyan)" />
-        <div style={{ position: 'relative', paddingLeft: '2rem' }}>
+        <div className="scrollable-area" style={{ position: 'relative', paddingLeft: '2rem', maxHeight: '45vh', paddingRight: '1rem' }}>
           {/* Vertical line */}
           <div style={{
             position: 'absolute',
@@ -1234,17 +1319,294 @@ const ContactSection = memo(() => {
   );
 });
 
-// ── Root export ────────────────────────────────────────────
-export default function PortfolioSections() {
+// ═══════════════════════════════════════════════════════════
+// BIOLOGY IMMERSION PANEL
+// ═══════════════════════════════════════════════════════════
+const BiologyPanel = memo(({ goNext, goPrev }) => {
+  const NUM_RUNGS = 22;
+  const rungs = Array.from({ length: NUM_RUNGS }, (_, i) => i);
+
   return (
-    <div id="main-content" tabIndex={-1}>
-      <HeroSection />
-      <AboutSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <CertsSection />
-      <TimelineSection />
-      <ContactSection />
+    <div className="panel-slide bio-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2rem', padding: '4rem 2rem', position: 'relative', overflow: 'hidden' }}>
+      {/* Background nebula blobs */}
+      {[
+        { top: '10%', left: '5%', w: 300, color: 'rgba(0,255,136,0.04)', dur: 8 },
+        { top: '60%', right: '8%', w: 250, color: 'rgba(0,243,255,0.05)', dur: 11 },
+        { top: '40%', left: '40%', w: 200, color: 'rgba(124,58,237,0.04)', dur: 9 },
+      ].map((b, i) => (
+        <div key={i} aria-hidden="true" style={{
+          position: 'absolute', top: b.top, left: b.left, right: b.right,
+          width: b.w, height: b.w, borderRadius: '50%',
+          background: b.color, filter: 'blur(60px)', pointerEvents: 'none',
+          animation: `cellPulse ${b.dur}s ease-in-out ${i * 1.5}s infinite`,
+        }} />
+      ))}
+
+      {/* Title */}
+      <div style={{ textAlign: 'center', zIndex: 2 }}>
+        <div className="cyber-label" style={{ color: 'var(--c-green)', marginBottom: '0.75rem' }}>// BIO_CYBER_NEXUS</div>
+        <h2 className="glow-supernova-cyan" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.8rem, 4vw, 3rem)', fontWeight: 900, letterSpacing: '0.15em' }}>
+          QUANTUM INTEL NEXUS
+        </h2>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--c-muted)', letterSpacing: '0.12em', marginTop: '0.5rem', maxWidth: 500, lineHeight: 1.7 }}>
+          Cybersecurity mirrors biology. Viruses mutate. Networks evolve. The operator studies both — to predict, adapt, and neutralize threats before they proliferate.
+        </p>
+      </div>
+
+      {/* DNA + Neural Network visual */}
+      <div style={{ display: 'flex', gap: 'clamp(2rem, 8vw, 6rem)', alignItems: 'center', zIndex: 2, flexWrap: 'wrap', justifyContent: 'center' }}>
+        {/* Large DNA Helix */}
+        <div style={{ position: 'relative', width: 60, height: 260, perspective: '400px' }}>
+          <div style={{ width: '100%', height: '100%', transformStyle: 'preserve-3d', animation: 'helixRotateA 6s linear infinite' }}>
+            {rungs.map(i => {
+              const t = i / (NUM_RUNGS - 1);
+              const angle = t * Math.PI * 6;
+              const ax = Math.sin(angle) * 22 + 28;
+              const bx = Math.sin(angle + Math.PI) * 22 + 28;
+              const y = t * 248;
+              return (
+                <React.Fragment key={i}>
+                  <div style={{
+                    position: 'absolute', left: ax - 5, top: y - 5,
+                    width: 10, height: 10, borderRadius: '50%',
+                    background: i % 2 === 0 ? '#00f3ff' : '#00ffbb',
+                    boxShadow: `0 0 10px ${i % 2 === 0 ? '#00f3ff' : '#00ffbb'}, 0 0 20px ${i % 2 === 0 ? '#00f3ff66' : '#00ffbb66'}`,
+                  }} />
+                  <div style={{
+                    position: 'absolute', left: bx - 5, top: y - 5,
+                    width: 10, height: 10, borderRadius: '50%',
+                    background: i % 2 === 0 ? '#ff0033' : '#ff6644',
+                    boxShadow: `0 0 10px ${i % 2 === 0 ? '#ff0033' : '#ff6644'}, 0 0 20px ${i % 2 === 0 ? '#ff003366' : '#ff664466'}`,
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    left: Math.min(ax, bx) + 5,
+                    top: y,
+                    width: Math.max(Math.abs(ax - bx) - 10, 0),
+                    height: 1,
+                    background: 'linear-gradient(90deg, rgba(0,243,255,0.5), rgba(255,0,51,0.5))',
+                  }} />
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Info cards */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: 340 }}>
+          {[
+            { icon: '⬡', label: 'NEURAL_PATTERN', text: 'Threat actors leave behavioral fingerprints. Pattern recognition is the key to attribution.', color: '#00f3ff' },
+            { icon: '⬙', label: 'MUTATION_DETECT', text: 'Like viral mutations, malware evolves. Signature-based detection alone is insufficient.', color: '#ff0033' },
+            { icon: '⬘', label: 'IMMUNE_RESPONSE', text: 'Automated containment protocols mirror biological immune response — fast, targeted, decisive.', color: '#00ffbb' },
+          ].map((item, i) => (
+            <div key={i} style={{
+              padding: '0.85rem 1.1rem',
+              background: 'rgba(0,0,0,0.4)',
+              border: `1px solid ${item.color}22`,
+              borderLeft: `3px solid ${item.color}`,
+              display: 'flex', gap: '0.8rem', alignItems: 'flex-start',
+              animation: `spaceFloat ${6 + i * 1.5}s ease-in-out ${i * 0.8}s infinite`,
+            }}>
+              <span style={{ fontSize: '1.2rem', color: item.color, flexShrink: 0 }}>{item.icon}</span>
+              <div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.5rem', color: item.color, letterSpacing: '0.2em', marginBottom: '0.25rem' }}>{item.label}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--c-muted)', lineHeight: 1.6 }}>{item.text}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Panel nav hint */}
+      <div style={{ display: 'flex', gap: '1rem', zIndex: 2 }}>
+        <button className="btn-ghost" style={{ fontSize: '0.6rem', letterSpacing: '0.15em' }} onClick={goPrev}>← BACK</button>
+        <button className="btn-cyber" style={{ fontSize: '0.6rem', letterSpacing: '0.15em' }} onClick={goNext}>PROCEED →</button>
+      </div>
+    </div>
+  );
+});
+BiologyPanel.displayName = 'BiologyPanel';
+
+// ═══════════════════════════════════════════════════════════
+// PANEL DOT NAVIGATION + ARROWS
+// ═══════════════════════════════════════════════════════════
+const PANEL_LABELS = [
+  'HERO', 'PROFILE', 'BIO_NEXUS', 'ARSENAL', 'MISSIONS', 'CLEARANCE', 'TIMELINE', 'COMMS'
+];
+
+function PanelNav({ active, total, onNav, isMoving }) {
+  return (
+    <div style={{ opacity: isMoving ? 0 : 1, transition: 'opacity 0.4s ease', pointerEvents: isMoving ? 'none' : 'auto' }}>
+      {/* Current panel label */}
+      <div className="panel-label">{PANEL_LABELS[active] || ''} [{active + 1}/{total}]</div>
+
+      {/* Left/right arrows */}
+      {active > 0 && (
+        <button className="panel-arrow left" onClick={() => onNav(active - 1)} aria-label="Previous panel">‹</button>
+      )}
+      {active < total - 1 && (
+        <button className="panel-arrow right" onClick={() => onNav(active + 1)} aria-label="Next panel">›</button>
+      )}
+
+      {/* Dot indicators */}
+      <div className="panel-dots" role="tablist" aria-label="Panel navigation">
+        {Array.from({ length: total }, (_, i) => (
+          <button
+            key={i}
+            className={`panel-dot${active === i ? ' active' : ''}`}
+            onClick={() => onNav(i)}
+            aria-label={`Go to ${PANEL_LABELS[i] || `panel ${i + 1}`}`}
+            role="tab"
+            aria-selected={active === i}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════
+// ROOT EXPORT — 3D TUNNEL SYSTEM
+// ═══════════════════════════════════════════════════════════
+export default function PortfolioSections({ githubRepos = [] }) {
+  const zOffset = useStore((s) => s.zOffset);
+  const setZOffset = useStore((s) => s.setZOffset);
+  const scrollVelocity = useStore((s) => s.scrollVelocity);
+  const setScrollVelocity = useStore((s) => s.setScrollVelocity);
+  const isSingularity = useStore((s) => s.isSingularity);
+  
+  const TOTAL = 8;
+  const lastScrollTime = useRef(Date.now());
+  const velocityTimeout = useRef(null);
+
+  const goTo = useCallback((i) => {
+    setZOffset(i * 10);
+  }, [setZOffset]);
+
+  // Expose global bridge for HUD nav links
+  useEffect(() => {
+    window.__navPanel = goTo;
+    const sectionMap = {
+      'hero': 0, 'about': 1, 'biology': 2, 'skills': 3,
+      'projects': 4, 'certs': 5, 'timeline': 6, 'contact': 7,
+    };
+    window.__navPanelBySection = (id) => {
+      const idx = sectionMap[id];
+      if (idx !== undefined) goTo(idx);
+    };
+    return () => { delete window.__navPanel; delete window.__navPanelBySection; };
+  }, [goTo]);
+
+  // Scroll handler for 3D depth
+  useEffect(() => {
+    if (isSingularity) return;
+
+    const handleWheel = (e) => {
+      // Allow native scroll for designated areas unless at boundaries
+      const scrollable = e.target.closest('.scrollable-area');
+      if (scrollable) {
+        const isAtTop = scrollable.scrollTop === 0;
+        const isAtBottom = scrollable.scrollHeight - scrollable.scrollTop <= scrollable.clientHeight + 1;
+        
+        // Let it scroll natively if moving within the element's bounds
+        if (!isAtTop && e.deltaY < 0) return;
+        if (!isAtBottom && e.deltaY > 0) return;
+      }
+
+      e.preventDefault();
+      const delta = e.deltaY * 0.08; // Increased sensitivity
+      const now = Date.now();
+      const dt = now - lastScrollTime.current;
+      lastScrollTime.current = now;
+      
+      const velocity = e.deltaY / (dt || 1);
+      setScrollVelocity(velocity);
+      
+      setZOffset(prev => Math.max(0, Math.min((TOTAL - 1) * 10, prev + delta)));
+
+      clearTimeout(velocityTimeout.current);
+      velocityTimeout.current = setTimeout(() => setScrollVelocity(0), 150);
+    };
+
+    const handleKey = (e) => {
+      if (['ArrowUp', 'ArrowLeft'].includes(e.key)) {
+        setZOffset(prev => Math.max(0, prev - 2));
+      } else if (['ArrowDown', 'ArrowRight'].includes(e.key)) {
+        setZOffset(prev => Math.min((TOTAL - 1) * 10, prev + 2));
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('keydown', handleKey);
+      clearTimeout(velocityTimeout.current);
+    };
+  }, [setZOffset, setScrollVelocity, isSingularity]);
+
+  const activeIndex = Math.round(zOffset / 10);
+  const isMoving = Math.abs(scrollVelocity) > 0.05 || (Math.abs(activeIndex * 10 - zOffset) > 0.5);
+
+  const renderSection = (index, Component, props = {}) => {
+    const sectionZ = index * 10;
+    const distance = sectionZ - zOffset;
+    
+    // Calculate 3D transforms
+    // scale(1) at distance=0, scale(0) at distance=10, scale(5) at distance=-10 (passing viewer)
+    const scale = Math.max(0, 1 - distance / 10);
+    const opacity = distance > 0 ? (1 - distance / 5) : (1 + distance / 5);
+    const z = distance * -200; // Multiplier for depth feel
+
+    if (opacity <= 0) return null;
+
+    return (
+      <div 
+        key={index}
+        className={`tunnel-section ${activeIndex === index ? 'active' : ''}`}
+        style={{
+          transform: `translateZ(${z}px) scale(${1})`,
+          opacity: Math.max(0, opacity),
+          zIndex: activeIndex === index ? 50 : (TOTAL - index),
+          pointerEvents: activeIndex === index ? 'auto' : 'none',
+        }}
+      >
+        <div className="tunnel-card" style={{
+           transform: `scale(${activeIndex === index ? 1 : 0.95})`,
+           transition: 'transform 0.5s ease',
+           transformStyle: 'preserve-3d',
+        }}>
+          <Component {...props} />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div id="main-content" className="tunnel-container" tabIndex={-1}>
+      {/* Panel navigation UI (Dots/Arrows) */}
+      <PanelNav active={activeIndex} total={TOTAL} onNav={goTo} isMoving={isMoving} />
+
+      {/* Hero */}
+      {renderSection(0, HeroSection, { goNext: () => goTo(1) })}
+      {/* About */}
+      {renderSection(1, AboutSection)}
+      {/* Biology */}
+      {renderSection(2, BiologyPanel, { goNext: () => goTo(3), goPrev: () => goTo(1) })}
+      {/* Skills */}
+      {renderSection(3, SkillsSection)}
+      {/* Projects */}
+      {renderSection(4, () => (
+        <div style={{ maxHeight: '80vh', overflowY: 'auto', paddingRight: '1rem', scrollbarWidth: 'thin' }}>
+          <ProjectsSection repos={githubRepos} />
+        </div>
+      ))}
+      {/* Certs */}
+      {renderSection(5, CertsSection)}
+      {/* Timeline */}
+      {renderSection(6, TimelineSection)}
+      {/* Contact */}
+      {renderSection(7, ContactSection)}
     </div>
   );
 }

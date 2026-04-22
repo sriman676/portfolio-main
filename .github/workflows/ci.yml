@@ -1,0 +1,35 @@
+name: CI/CD Pipeline & SecOps
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build_and_audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm ci
+
+    - name: Run Build
+      run: npm run build
+
+    - name: Security Check (npm audit)
+      run: npm audit --audit-level=high
+
+    - name: Code Quality (Lint)
+      # Uses the standard Next JS ESLint rules
+      run: npm run lint
+      continue-on-error: true # Non-blocking for now until all rules are strict

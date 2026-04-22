@@ -1,0 +1,100 @@
+{
+  "list": [
+    {
+      "name": "SOC Operations",
+      "category": "defense",
+      "level": 95
+    },
+    {
+      "name": "SIEM (Splunk/ELK)",
+      "category": "defense",
+      "level": 92
+    },
+    {
+      "name": "Crowdstrike (EDR)",
+      "category": "defense",
+      "level": 88
+    },
+    {
+      "name": "Wireshark (DPI)",
+      "category": "defense",
+      "level": 94
+    },
+    {
+      "name": "Threat Hunting",
+      "category": "defense",
+      "level": 90
+    },
+    {
+      "name": "Python Automation",
+      "category": "dev",
+      "level": 85
+    },
+    {
+      "name": "Kali Linux",
+      "category": "offense",
+      "level": 94
+    },
+    {
+      "name": "Metasploit",
+      "category": "offense",
+      "level": 82
+    },
+    {
+      "name": "Burp Suite",
+      "category": "offense",
+      "level": 80
+    },
+    {
+      "name": "Nmap (Recon)",
+      "category": "offense",
+      "level": 96
+    },
+    {
+      "name": "Log Triage",
+      "category": "forensics",
+      "level": 92
+    },
+    {
+      "name": "Packet Analysis",
+      "category": "forensics",
+      "level": 95
+    },
+    {
+      "name": "OSINT Frameworks",
+      "category": "recon",
+      "level": 88
+    },
+    {
+      "name": "Vulnerability Scans",
+      "category": "recon",
+      "level": 90
+    }
+  ],
+  "categories": [
+    {
+      "id": "all",
+      "label": "ATS_KEYWORDS"
+    },
+    {
+      "id": "defense",
+      "label": "BLUE_TEAM"
+    },
+    {
+      "id": "offense",
+      "label": "RED_TEAM"
+    },
+    {
+      "id": "forensics",
+      "label": "FORENSICS"
+    },
+    {
+      "id": "recon",
+      "label": "RECON"
+    },
+    {
+      "id": "dev",
+      "label": "AUTOMATION"
+    }
+  ]
+}

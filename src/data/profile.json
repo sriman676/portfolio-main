@@ -1,0 +1,111 @@
+{
+  "name": "Voddiraju Sriman Rutvik",
+  "nameShort": "Sriman Rutvik",
+  "initials": "VSR",
+  "role": "Lead SOC Analyst | Cybersecurity Specialist",
+  "university": "SRM University AP",
+  "degree": "B.Tech – Computer Science & Engineering (Cybersecurity)",
+  "year": "Sentinel Protocol Year 02",
+  "location": "Sector: Mangalagiri, India (Global/Remote Operational)",
+  "tagline": "Wayne-Stark Initiative: Securing the Multiverse through automated threat detection and operational resilience.",
+  "availableForWork": true,
+  "resumeUrl": "/Portfolio/resume.pdf",
+  "executiveSummary": {
+    "metrics": [
+      {
+        "label": "False Positive Reduction",
+        "value": "40%",
+        "icon": "shield"
+      },
+      {
+        "label": "Triage Speed Improvement",
+        "value": "35%",
+        "icon": "bolt"
+      },
+      {
+        "label": "Security Assessments Complete",
+        "value": "12+",
+        "icon": "check"
+      }
+    ],
+    "primaryCTA": "DOWNLOAD_EXECUTIVE_CV"
+  },
+  "hiringEssentials": {
+    "targetRoles": [
+      "SOC Analyst Intern",
+      "Detection Engineer Intern",
+      "Blue Team Analyst"
+    ],
+    "location": "Mangalagiri, India (Open to Remote/Relocation)",
+    "workAuth": "India (Authorized)",
+    "availability": "Immediate / Remote Friendly",
+    "noticePeriod": "None (Student)"
+  },
+  "roleTargeting": {
+    "soc": [
+      "Proficient in real-time alert triage and incident investigation using SIEM (Splunk/ELK).",
+      "Hands-on experience with packet-level forensics (Wireshark) to identify anomalous traffic.",
+      "Committed to 24/7 operational resilience and proactive threat mitigation."
+    ],
+    "detection": [
+      "Designing custom detection logic for brute-force and lateral movement patterns.",
+      "Automating log parsing workflows via Python to reduce mean-time-to-detection (MTTD).",
+      "Analyzing MITRE ATT&CK techniques to implement defensive countermeasures."
+    ],
+    "blueTeam": [
+      "Hardening network infrastructure through vulnerability assessments and CI/CD security.",
+      "Implementing zero-trust messaging protocols for secure incident response comms.",
+      "Continuous learning via simulated SOC environments (LetsDefend)."
+    ]
+  },
+  "timeline": [
+    {
+      "year": "2022 – PRESENT",
+      "role": "B.Tech — CSE (Cybersecurity)",
+      "org": "SRM University AP",
+      "type": "education",
+      "detail": "Focused on SOC Engineering, Digital Forensics, and Tactical Network Infrastructure."
+    },
+    {
+      "year": "2024",
+      "role": "Google Cybersecurity Professional",
+      "org": "Google",
+      "type": "certification",
+      "detail": "Validated skills in SIEM triage, threat mitigation, and operational documentation."
+    },
+    {
+      "year": "2023",
+      "role": "SOC Analyst Training",
+      "org": "LetsDefend",
+      "type": "experience",
+      "detail": "Execution of real-time malware analysis and anomalous behavior investigations."
+    }
+  ],
+  "testimonials": [
+    {
+      "quote": "Sriman demonstrates a high level of operational discipline and a keen eye for anomalous patterns. His technical foundation is solid.",
+      "attribution": "Professional Reference // LetsDefend SOC Verification",
+      "link": "https://app.letsdefend.io/user/sriman676"
+    }
+  ],
+  "narration": {
+    "normal": {
+      "hero": "Acknowledge. This is Sriman Rutvik, Lead SOC Analyst. My focus is on absolute operational resilience and real-time multiversal threat detection. We architect security systems that aren't just redundant—they're proactive. sky is the limit. Initiation sequence complete.",
+      "about": "Operating from SRM University AP, I specialize in zero-trust infrastructure and automated defense. My mission is technical excellence in the service of high-integrity security environments.",
+      "skills": "Monitor the arsenal. I maintain peak proficiency across Splunk, Kali Linux, and full-spectrum network forensics. Every tool is calibrated for maximum tactical visibility.",
+      "projects": "Accessing mission archives. From Scapy IDS engines to Python log parsers—performance is the only metric. We don't just detect threats; we neutralize them.",
+      "certs": "Operational verification complete. Certifications from Google, IBM, and Cisco serve as proof-of-concept for my technical commitment.",
+      "timeline": "Strategic evolution log. Since 2022, I have been hardening my technical expertise through the intersection of academic rigor and operational implementation.",
+      "contact": "Secure Comms Link Active. Initiate contact via LinkedIn or GitHub to discuss mission-critical roles or strategic collaborative opportunities."
+    },
+    "recruiter": {
+      "hero": "Hi, I am Sriman, a Cybersecurity Enthusiast. I'm specifically interested in SOC Analyst roles and building automated detection pipelines. I'm currently a student at SRM University AP, focusing on real-world defense. Welcome to my professional portfolio.",
+      "about": "I am a B.Tech student specializing in Cybersecurity. I have a strong foundation in SOC operations, incident triage, and network security fundamentals.",
+      "skills": "In a professional context, I focus on SIEM tools like Splunk and ELK, alongside network forensic tools like Wireshark. I use Python to automate repetitive security tasks.",
+      "projects": "My projects focus on solving real-world security gaps, such as automating log analysis and building intrusion detection systems from scratch.",
+      "certs": "I've earned certifications from Google and IBM to validate my skills in security analysis and incident response.",
+      "timeline": "My academic journey at SRM University has been focused on practical cybersecurity skills, preparing me for a high-impact role in a modern SOC.",
+      "contact": "I'm always open to discussing internship or full-time opportunities. You can find my contact details and LinkedIn profile below."
+    }
+  }
+}

@@ -13,12 +13,15 @@ class AudioEngine {
   // Initialized on first user interaction (unlocks AudioContext)
   init() {
     if (this.ctx) return;
-    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    this.masterBus = this.ctx.createGain();
-    this.masterBus.gain.value = 0.15; // Global volume
-    this.masterBus.connect(this.ctx.destination);
-    this.muted = false;
-    console.log('[AUDIO_INITIALIZED]');
+    try {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.masterBus = this.ctx.createGain();
+      this.masterBus.gain.value = 0.15; // Global volume
+      this.masterBus.connect(this.ctx.destination);
+      this.muted = false;
+    } catch {
+      console.warn('UI_AUDIO: FAILED_TO_INITIALIZE');
+    }
   }
 
   setMute(val) {
@@ -48,7 +51,7 @@ class AudioEngine {
 
       osc.start();
       osc.stop(this.ctx.currentTime + duration);
-    } catch (e) {
+    } catch {
       // Silent fail (browser block)
     }
   }
@@ -71,6 +74,27 @@ class AudioEngine {
     gain.connect(this.masterBus);
     osc.start();
     osc.stop(this.ctx.currentTime + 0.3);
+  }
+
+  // Singularity Warp (Rising high-pitch frequency)
+  playWarp(duration = 1.5) {
+    if (!this.ctx || this.muted) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(4000, this.ctx.currentTime + duration);
+    
+    gain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.3, this.ctx.currentTime + duration * 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + duration);
+    
+    osc.connect(gain);
+    gain.connect(this.masterBus);
+    
+    osc.start();
+    osc.stop(this.ctx.currentTime + duration);
   }
 }
 

@@ -1,6 +1,9 @@
+'use client';
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useStore } from '../systems/store';
 import { config } from '../portfolioConfig';
+import { audio } from '../systems/audio';
 
 // ── Build searchable index from config ────────────────────
 const buildIndex = () => {
@@ -61,11 +64,28 @@ export default function SearchOverlay() {
   const inputRef                = useRef(null);
   const listRef                 = useRef(null);
 
+  // Global search shortcut (CMD+K, CTRL+K or /)
+  useEffect(() => {
+    const handleGlobalKey = (e) => {
+      // Ignore if user is already typing in an input
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
+      if (((e.metaKey || e.ctrlKey) && e.key === 'k') || e.key === '/') {
+        e.preventDefault();
+        useStore.getState().toggleSearch();
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKey);
+    return () => window.removeEventListener('keydown', handleGlobalKey);
+  }, []);
+
   // Open/close animation
   useEffect(() => {
     if (isSearchOpen) {
-      setMounted(true);
-      setCursor(0);
+      requestAnimationFrame(() => {
+        setMounted(true);
+        setCursor(0);
+      });
       requestAnimationFrame(() => inputRef.current?.focus());
     } else {
       const t = setTimeout(() => setMounted(false), 250);
@@ -76,8 +96,10 @@ export default function SearchOverlay() {
   // Search
   useEffect(() => {
     if (!searchQuery.trim()) {
-      setResults([]);
-      setCursor(0);
+      requestAnimationFrame(() => {
+        setResults([]);
+        setCursor(0);
+      });
       return;
     }
     const q = searchQuery.trim();
@@ -90,7 +112,6 @@ export default function SearchOverlay() {
 
   // Keyboard navigation & Command Palette logic
   const handleKeyDown = useCallback((e) => {
-    if (e.key === 'Escape') { closeSearch(); return; }
     
     if (e.key === 'Enter') {
       const q = searchQuery.trim().toUpperCase();
@@ -114,6 +135,12 @@ export default function SearchOverlay() {
       }
       if (q === 'TERMINAL' || q === 'CMD') {
         useStore.getState().toggleTerminal();
+        closeSearch();
+        return;
+      }
+      if (q === 'SINGULARITY' || q === '1') {
+        audio.playWarp(1.5);
+        useStore.getState().enterSingularity();
         closeSearch();
         return;
       }

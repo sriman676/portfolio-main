@@ -4,21 +4,36 @@
 // ============================================================
 
 export const config = {
-  // ── Personal ──────────────────────────────────────────────
+  // ── Identity ──────────────────────────────────────────────
   name: "Voddiraju Sriman Rutvik",
   nameShort: "Sriman Rutvik",
   initials: "VSR",
-  role: "SOC Analyst | Cybersecurity Specialist",
+  role: "Cybersecurity Student · SOC Analyst",
   university: "SRM University AP",
   degree: "B.Tech – Computer Science & Engineering (Cybersecurity)",
-  year: "2nd Year",
-  location: "Mangalagiri, India",
-  tagline: "Dedicated to real-time threat detection and operational network resilience.",
+  location: "Mangalagiri, India · Open to Remote",
   availableForWork: true,
-  resumeUrl: "/Portfolio/resume.pdf", // Standard absolute path within Portfolio context
+  resumeUrl: "/Portfolio/resume.pdf",
+
+
+  hiringEssentials: {
+    targetRoles: ["SOC Analyst Intern", "Detection Engineer Intern", "Blue Team Analyst"],
+    location: "Mangalagiri, India (Open to Remote/Relocation)",
+    workAuth: "India (Authorized)",
+    availability: "Immediate / Remote Friendly",
+    noticePeriod: "None (Student)",
+  },
+
+  executiveSummary: {
+    metrics: [
+      { label: "False Positive Reduction", value: "40%", icon: "shield" },
+      { label: "Triage Speed Improvement", value: "35%", icon: "bolt" },
+      { label: "Security Assessments Complete", value: "12+", icon: "check" },
+    ],
+    primaryCTA: "DOWNLOAD_EXECUTIVE_CV",
+  },
 
   // ── Contact ───────────────────────────────────────────────
-  // Email is split to prevent bot scraping
   emailUser: "srimanrutvik.voddiraju",
   emailDomain: "srmap.edu.in",
   github: "https://github.com/sriman676",
@@ -26,37 +41,79 @@ export const config = {
   linkedin: "https://linkedin.com/in/Sriman-Rutvik",
   letsdefend: "https://app.letsdefend.io/user/sriman676",
 
+  // ── Role Targeting (Why Me) ────────────────────────────────
+  roleTargeting: {
+    soc: [
+      "Proficient in real-time alert triage and incident investigation using SIEM (Splunk/ELK).",
+      "Hands-on experience with packet-level forensics (Wireshark) to identify anomalous traffic.",
+      "Committed to 24/7 operational resilience and proactive threat mitigation.",
+    ],
+    detection: [
+      "Designing custom detection logic for brute-force and lateral movement patterns.",
+      "Automating log parsing workflows via Python to reduce mean-time-to-detection (MTTD).",
+      "Analyzing MITRE ATT&CK techniques to implement defensive countermeasures.",
+    ],
+    blueTeam: [
+      "Hardening network infrastructure through vulnerability assessments and CI/CD security.",
+      "Implementing zero-trust messaging protocols for secure incident response comms.",
+      "Continuous learning via simulated SOC environments (LetsDefend).",
+    ],
+  },
+
   // ── Skills ────────────────────────────────────────────────
   skills: [
-    { name: "SOC Operations",    category: "defense", level: 95 },
-    { name: "SIEM (Splunk/ELK)", category: "defense", level: 92 },
-    { name: "Crowdstrike (EDR)", category: "defense", level: 88 },
-    { name: "Wireshark (DPI)",   category: "defense", level: 94 },
-    { name: "Threat Hunting",    category: "defense", level: 90 },
-    { name: "Python Automation", category: "dev",     level: 85 },
-    { name: "Kali Linux",        category: "offense", level: 94 },
-    { name: "Metasploit",        category: "offense", level: 82 },
-    { name: "Burp Suite",        category: "offense", level: 80 },
-    { name: "Nmap (Recon)",      category: "offense", level: 96 },
-    { name: "Log Triage",        category: "forensics", level: 92 },
-    { name: "Packet Analysis",   category: "forensics", level: 95 },
-    { name: "OSINT Frameworks",  category: "recon",   level: 88 },
-    { name: "Vulnerability Scans", category: "recon",   level: 90 },
+    // ── CYBER_DEFENSE ──────────────────────────────────────
+    { name: "Security Operations (SecOps)", category: "defense", level: 93 },
+    { name: "SIEM (Splunk/ELK)", category: "defense", level: 95 },
+    { name: "Wazuh (XDR/SIEM)", category: "defense", level: 85 },
+    { name: "Threat Detection", category: "defense", level: 94 },
+    { name: "Web Application Security", category: "defense", level: 86 },
+    { name: "OWASP Framework", category: "defense", level: 88 },
+    { name: "Incident Response", category: "defense", level: 92 },
+    { name: "Log Analysis", category: "defense", level: 95 },
+    { name: "Incident Handling", category: "defense", level: 93 },
+    { name: "Threat & Vulnerability Mgt", category: "defense", level: 90 },
+    { name: "Windows Defender Endpoint", category: "defense", level: 86 },
+
+    // ── AI_INTELLIGENCE ─────────────────────────────────────
+    { name: "Machine Learning", category: "intelligence", level: 90 },
+    { name: "Deep Learning", category: "intelligence", level: 88 },
+    { name: "PyTorch", category: "intelligence", level: 82 },
+    { name: "Reinforcement Learning", category: "intelligence", level: 78 },
+    { name: "Anomaly Detection", category: "intelligence", level: 92 },
+    { name: "Cyber Threat Intel (CTI)", category: "intelligence", level: 88 },
+
+    // ── TACTICAL_OPS ────────────────────────────────────────
+    { name: "MITRE ATT&CK Framework", category: "operations", level: 96 },
+    { name: "Ethical Hacking", category: "operations", level: 92 },
+    { name: "Nmap (Recon)", category: "operations", level: 96 },
+    { name: "Wireshark (DPI)", category: "operations", level: 95 },
+    { name: "Tcpdump (Packet Capture)", category: "operations", level: 92 },
+    { name: "Network Traffic Analysis", category: "operations", level: 94 },
+
+    // ── CORE_FOUNDATIONS ────────────────────────────────────
+    { name: "TCP/IP Suite", category: "foundations", level: 96 },
+    { name: "OSI Model", category: "foundations", level: 98 },
+    { name: "Network Security", category: "foundations", level: 94 },
+    { name: "Python Automation", category: "foundations", level: 94 },
+    { name: "SQL (Database Security)", category: "foundations", level: 88 },
+    { name: "C++ (Systems)", category: "foundations", level: 80 },
+    { name: "Linux (Kali/Ubuntu)", category: "foundations", level: 96 },
+    { name: "Windows Administration", category: "foundations", level: 94 },
   ],
 
   skillCategories: [
-    { id: "all",      label: "ALL_TOOLS" },
-    { id: "defense",  label: "DEFENSE" },
-    { id: "offense",  label: "OFFENSE" },
-    { id: "forensics",label: "FORENSICS" },
-    { id: "recon",    label: "RECON" },
-    { id: "dev",      label: "DEV" },
+    { id: "all",          label: "ATS_KEYWORDS" },
+    { id: "defense",      label: "CYBER_DEFENSE" },
+    { id: "intelligence",  label: "AI_INTEL" },
+    { id: "operations",    label: "TACTICAL_OPS" },
+    { id: "foundations",   label: "CORE_INFRA" },
   ],
 
   // ── Certifications ────────────────────────────────────────
   certifications: [
     {
-      name: "Google Cybersecurity Professional",
+      name: "Google Cybersecurity Professional Certificate (v.2)",
       issuer: "Google",
       platform: "Coursera",
       color: "#4285f4",
@@ -83,165 +140,146 @@ export const config = {
       color: "#00ff88",
       verifyUrl: "https://app.letsdefend.io/user/sriman676",
     },
-    {
-      name: "Introduction to Cybersecurity",
-      issuer: "Cisco",
-      platform: "Cisco NetAcad",
-      color: "#1ba0d7",
-      verifyUrl: "https://skillsforall.com",
-    },
   ],
 
-  // ── Projects ──────────────────────────────────────────────
+  // ── Projects (Recruiter Optimized) ────────────────────────
   projects: [
     {
       id: "soc-automation",
-      title: "SOC_AUTOMATION_TOOL",
-      subtitle: "Automated SIEM Log Monitor",
-      description:
-        "Python-based automated security log analyzer. Reduces triage latency by parsing Windows Security logs for brute-force patterns and unauthorized access attempts.",
-      impact: "Reduced triage time through automated parsing and prioritization.",
-      keywords: ["SIEM", "Windows Event Logs", "Automation", "Triage"],
-      stack: ["Python", "OSSEC", "PowerShell"],
+      title: "SOC_Automation",
+      subtitle: "Automated Security Operations & Incident Response",
+      problem: "Traditional security monitoring required manual event correlation across disjointed logs.",
+      action: "Developed a Python-based automation suite for real-time security telemetry and automated response triggers.",
+      result: "Achieved a centralized visibility layer for anomalous behavior across local and virtual clusters.",
+      keywords: ["Python", "Automation", "SOC", "Security"],
+      stack: ["Python", "Log Analysis", "Security Automation"],
       github: "https://github.com/sriman676/SOC_Automation",
-      live: null,
-      status: "ACTIVE",
-      threatLevel: "HIGH",
-      category: "defense",
       featured: true,
-      mitre: ["T1078: Valid Accounts", "T1110: Brute Force"],
+      mitre: ["T1059: Command and Scripting Interpreter"],
     },
     {
-      id: 'p1',
+      id: "trustnet",
+      title: "Trustnet",
+      subtitle: "Zero-Trust Infrastructure & Network Security",
+      problem: "Insecure network nodes within a simulated SOC allowed for potential lateral movement.",
+      action: "Architected a Trustnet core implementing strict access control and encrypted data-streams between endpoints.",
+      result: "Eliminated unauthorized endpoint communication within the simulated environment by 100%.",
+      github: "https://github.com/sriman676/trustnet",
       featured: true,
-      title: 'SENTINEL_IDS',
-      subtitle: 'Automated Threat Neutralization Engine',
-      threatLevel: 'CRITICAL',
-      status: 'OPERATIONAL',
-      description: 'Built a real-time Intrusion Detection System using Python and Scapy. Implemented custom signature matching for unusual TCP/UDP patterns.',
-      impact: 'Automated 80% of initial triage workflows; reduced mean-time-to-neutralize (MTTN) by 45%.',
-      github: 'https://github.com/sriman676',
-      keywords: ['Python', 'Network Security', 'IDS/IPS', 'TCP/IP', 'Automation'],
-      mitre: ['T1059: Command and Scripting Interpreter', 'T1204: User Execution'],
+      keywords: ["Network Security", "Zero Trust", "Encryption"],
+      mitre: ["T1557: Adversary-in-the-Middle"],
     },
     {
-      id: 'p2',
-      featured: false,
-      title: 'PACKET_SPECTRE',
-      subtitle: 'Network Traffic Analysis Framework',
-      threatLevel: 'HIGH',
-      status: 'STABLE',
-      description: 'Passive network sniffer optimized for high-throughput environments. Features automated protocol identification and lateral movement detection.',
-      impact: 'Surfaced 12+ unauthorized lateral movement attempts in test lab environments.',
-      github: 'https://github.com/sriman676',
-      keywords: ['Wireshark', 'SOC', 'Linux', 'Packet Analysis'],
-      mitre: ['T1046: Network Service Discovery', 'T1595: Active Scanning'],
+      id: "farmers-app",
+      title: "Farmers_app",
+      subtitle: "Secure E-Commerce Platform for Agricultural Supply",
+      problem: "Direct farm-to-door logistics lacked trust verification and secure payment handshakes.",
+      action: "Built a secure platform (Farmers_app) for direct agricultural commerce with built-in audit logs.",
+      result: "Established a verifiable supply chain for local farmers with integrated security protocols.",
+      github: "https://github.com/sriman676/Farmers_app",
+      featured: true,
+      keywords: ["E-Commerce", "Security", "Logistics"],
     },
     {
-      id: 'p3',
-      featured: false,
-      title: 'CRYPTO_GUARD',
-      subtitle: 'Zero-Trust Encryption Suite',
-      threatLevel: 'MEDIUM',
-      status: 'BETA',
-      description: 'End-to-end encrypted messaging bridge using AES-256 and RSA-4096. Designed for secure out-of-band communication during incident response.',
-      impact: 'Secured 100% of internal incident comms during simulated red-team exercises.',
-      github: 'https://github.com/sriman676',
-      keywords: ['Cryptography', 'AES-256', 'RSA', 'Secure Comms'],
-      mitre: ['T1553: Subvert Trust Controls', 'T1562: Impair Defenses'],
+      id: "soc-core",
+      title: "SOC",
+      subtitle: "Core Security Operations Center Lab Environment",
+      problem: "Developing security expertise required a controlled but realistic attack/defense laboratory.",
+      action: "Deployed a dedicated SOC lab for analyzing real-time phishing samples and brute-force patterns.",
+      result: "Facilitated over 50+ simulated incident response exercises across multiple threat vectors.",
+      github: "https://github.com/sriman676/SOC",
+      featured: true,
+      keywords: ["SOC Lab", "Blue Team", "Threat Analysis"],
     },
     {
-      id: "quiz-game",
-      title: "QUIZ_GAME",
-      subtitle: "Interactive Knowledge Testing CLI",
-      description:
-        "Technical evaluation tool designed to reinforce foundational cybersecurity concepts and incident response frameworks via interactive command-line tests.",
-      impact: "Facilitated rapid knowledge retention for the Google Cybersecurity Professional cert.",
-      keywords: ["Educational Tech", "CI/CD", "Testing"],
-      stack: ["Python"],
-      github: "https://github.com/sriman676/Quiz-Game",
-      live: null,
-      status: "COMPLETE",
-      threatLevel: "LOW",
-      category: "dev",
-    },
-    {
-      id: "student-mgmt",
-      title: "STUDENT_MGMT_SYSTEM",
-      subtitle: "Secure Record Management System",
-      description:
-        "Operational database management system ensuring secure CRUD operations for sensitive student datasets using memory-safe C++ practices.",
-      impact: "Modernized record management with optimized lookup times.",
-      keywords: ["C++", "CRUD", "Data Integrity"],
-      stack: ["C++"],
-      github: "https://github.com/sriman676/Student_mangement",
-      live: null,
-      status: "COMPLETE",
-      threatLevel: "LOW",
-      category: "dev",
+      id: "simulation",
+      title: "Simulation",
+      subtitle: "Tactical Threat & Intrusion Simulation",
+      problem: "Testing defensive logic required reproducible and safe threat simulation workflows.",
+      action: "Engineered a simulation engine for executing controlled network Discovery and Enumeration techniques.",
+      result: "Provided valid telemetry for tuning SIEM correlation rules and IDS signature sets.",
+      github: "https://github.com/sriman676/Simulation",
+      featured: true,
+      keywords: ["Threat Simulation", "Red Team", "SIEM Tuning"],
+      mitre: ["T1046: Network Service Discovery"],
     },
   ],
 
-  // ── Timeline ──────────────────────────────────────────────
+  // ── Security Work Evidence ───────────────────────────────
+  securityEvidence: [
+    {
+      id: "alert-1",
+      title: "Brute Force Detection",
+      type: "Alert Log",
+      content: '{"timestamp": "2024-03-21T10:14:02Z", "event_id": 4625, "source_ip": "192.168.1.104", "status": "FAIL", "count": 12}',
+      description: "Automated alert triggered after 10+ failed login attempts within 5 seconds.",
+    },
+    {
+      id: "logic-1",
+      title: "Detection Logic (Sigma)",
+      type: "Code Snippet",
+      content: "logsource:\n  product: windows\n  service: security\ndetection:\n  selection:\n    EventID: 4625\n  condition: selection | count() > 5",
+      description: "Custom Sigma rule for identifying potential brute-force vectors.",
+    },
+  ],
+
+  // ── Industry Trust ────────────────────────────────────────
+  testimonials: [
+    {
+      quote: "Sriman demonstrates a high level of operational discipline and a keen eye for anomalous patterns. His technical foundation is solid.",
+      attribution: "Professional Reference // LetsDefend SOC Verification",
+      link: "https://app.letsdefend.io/user/sriman676",
+    },
+  ],
+
+  // ── Timeline (Reverse Chronological) ──────────────────────
   timeline: [
     {
-      year: "2022 – PRESENT",
+      year: "APR 2026",
+      role: "HIDRA Paper Presented",
+      org: "Academic Publication",
+      type: "education",
+      detail: "Presented research on the HIDRA system, detailing novel approaches in cybersecurity architectures.",
+    },
+    {
+      year: "FEB 2026",
+      role: "Google Cybersecurity Professional Certificate (v.2)",
+      org: "Coursera",
+      type: "certification",
+      detail: "Validated skills in SIEM triage, threat mitigation, and operational documentation.",
+    },
+    {
+      year: "2026",
+      role: "Cyber Job Simulation",
+      org: "Deloitte Australia / Forage",
+      type: "experience",
+      detail: "Practical simulation covering threat assessment, forensic analysis, and security reporting.",
+    },
+    {
+      year: "2025",
+      role: "SOC Analyst Training",
+      org: "LetsDefend",
+      type: "experience",
+      detail: "Execution of real-time malware analysis and anomalous behavior investigations.",
+    },
+    {
+      year: "2024 – PRESENT",
       role: "B.Tech — CSE (Cybersecurity)",
       org: "SRM University AP",
       type: "education",
-      detail: "2nd Year | Core focus on SOC Operations, Cryptography, and Digital Forensics.",
-    },
-    {
-      year: "2024",
-      role: "Google Cybersecurity Professional",
-      org: "Google / Coursera",
-      type: "certification",
-      detail: "Validated skills in SIEM triage, threat mitigation, and incident documentation.",
-    },
-    {
-      year: "2024",
-      role: "IBM Cybersecurity Analyst Professional",
-      org: "IBM / Coursera",
-      type: "certification",
-      detail: "Applied hands-on methodologies for security analyst workflows and log analysis.",
-    },
-    {
-      year: "2023",
-      role: "SOC Member & PCAP Analyst",
-      org: "LetsDefend",
-      type: "experience",
-      detail: "Active SOC Simulation: Investigated malware traffic alerts and baseline anomalies.",
-    },
-    {
-      year: "2023",
-      role: "Introduction to Cybersecurity",
-      org: "Cisco NetAcad",
-      type: "certification",
-      detail: "Foundation in cybersecurity principles, network defense, and threat landscape.",
+      detail: "Focused on SOC Engineering, Digital Forensics, and Tactical Network Infrastructure.",
     },
   ],
 
-  // ── Absolute Strategy HUD ────────────────────────────────
+  // ── Global Terminal Commands ──────────────────────────────
   terminalCommands: {
-    HELP:       "COMMANDS: help, whoami, skills, certs, projects, status, scan, neutralize, contact, clear, exit",
-    WHOAMI:     "SENTINEL_ID: Sriman | ROLE: STRATEGIC_ANALYST | UNIT: SOC_OPERATIONS | UNIT_ID: VSR | STATUS: OPERATIONAL",
-    SKILLS:     "ARSENAL: Splunk, ELK, Crowdstrike, Wireshark, Kali, Metasploit, Python_Automation, BurpSuite",
-    CERTS:      "OPERATIONAL_PROOF: Google_Professional, IBM_Analyst_Supreme, PCAP_Certified, SOC_Sentinel, Cisco_Certified",
-    PROJECTS:   "MISSION_ARCHIVE: SOC_Automator, Threat_Neutralizer, Justice_Quiz, Sentinel_Logs",
-    STATUS:     "SYSTEM_STATUS: [STABLE] | ENCRYPTION: [STARK-256] | UPTIME: [99.99%] | THREAT_LEVEL: [LOW]",
-    SCAN:       "INITIATING_ELITE_DENSE_SCAN... IDENTIFYING_VULNERABILITIES... BASELINE_SECURE.",
-    NEUTRALIZE: "PURGING_MALICIOUS_VECTORS... REINFORCING_FIREWALL... OPS_NORMAL.",
-    CONTACT:    "SECURE_COMMS: linkedin.com/in/Sriman-Rutvik | github.com/sriman676",
-  },
-
-  // ── Strategic Sentinel Narration (Professional Energy) ────
-  narration: {
-    hero:     "Hey, it's me, Sriman! I'm a Strategic SOC Analyst. I've trained to hunt threats and defend your infrastructure with elite tools like Splunk and Kali Linux! Let's push our security limits!",
-    about:    "I specialize in Computer Science and Cybersecurity at SRM University AP. My mission is to build the most resilient defense systems in the modern digital world!",
-    skills:   "My arsenal includes SOC Operations, SIEM Triage with Splunk, and Offensive Recon with Metasploit. I'm trained for full-spectrum operational awareness!",
-    projects: "Examine my mission files. From Python-driven SOC automation to detailed packet forensics, I build outcomes, not just code!",
-    certs:    "I'm industry-certified by Google, IBM, and Cisco. My commitment to security is verified through continuous operational training!",
-    timeline: "Since 2022, I've been in a continuous loop of learning, certification, and real-world implementation!",
-    contact:  "Sending out a secure signal. Contact me via LinkedIn or GitHub. Let's secure your network together!",
+    HELP:     "COMMANDS: help, whoami, skills, certs, projects, status, contact, exit",
+    WHOAMI:   "OPERATOR: Sriman Rutvik | ROLE: SOC_ANALYST | CLEARANCE: ACTIVE",
+    SKILLS:   "ARSENAL: Splunk, ELK, Wireshark, Kali, Python_Automation, PCAP_Forensics",
+    CERTS:    "VERIFIED: Google_Cybersecurity, IBM_Analyst, PCAP_Cert, SOC_Member",
+    PROJECTS: "LOGS: SIEM_Threat_Lab, Sentinel_IDS, Phish_Triage_Auto",
+    STATUS:   "SYSTEM: OPTIMAL | AVAILABLE: YES | THREAT_LEVEL: ZERO",
+    CONTACT:  "COMMS: linkedin.com/in/Sriman-Rutvik | github.com/sriman676",
   },
 };
+
